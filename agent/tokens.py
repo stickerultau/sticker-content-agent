@@ -26,15 +26,21 @@ def _fingerprint(token: str) -> str:
     return hashlib.sha256(token.encode()).hexdigest()[:16]
 
 
-def load() -> dict:
-    stored = None
+def read_encrypted() -> dict | None:
+    """The token data in state/ig_token.enc, or None if there is no file or no TOKEN_KEY."""
     fernet = _fernet()
-    if fernet and ENCRYPTED.exists():
-        try:
-            stored = json.loads(fernet.decrypt(ENCRYPTED.read_bytes()))
-        except InvalidToken as exc:
-            raise RuntimeError("TOKEN_KEY cannot decrypt state/ig_token.enc (key changed?). Run: python run.py seal-token") from exc
-    elif PLAIN.exists():
+    if not (fernet and ENCRYPTED.exists()):
+        return None
+    try:
+        return json.loads(fernet.decrypt(ENCRYPTED.read_bytes()))
+    except InvalidToken as exc:
+        raise RuntimeError("TOKEN_KEY cannot decrypt state/ig_token.enc (key changed?). "
+                           "Put a fresh IG_ACCESS_TOKEN in .env, then run: python run.py seal-token") from exc
+
+
+def load() -> dict:
+    stored = read_encrypted()
+    if stored is None and PLAIN.exists():
         stored = json.loads(PLAIN.read_text(encoding="utf-8"))
 
     env_token = env("IG_ACCESS_TOKEN")

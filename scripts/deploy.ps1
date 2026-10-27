@@ -11,7 +11,7 @@
   Run from the project folder:
     powershell -ExecutionPolicy Bypass -File scripts\deploy.ps1
 #>
-param([string]$RepoName = "sticker-content-agent")
+param([string]$RepoName = "sticker-content-agent", [switch]$SkipTestRun)
 
 $ErrorActionPreference = "Continue"
 Set-Location (Split-Path -Parent $PSScriptRoot)
@@ -44,6 +44,12 @@ $owner = (gh api user --jq .login).Trim()
 $repo = "$owner/$RepoName"
 Write-Host "Repository: https://github.com/$repo"
 
+# Re-runs: start from the latest version on GitHub (the schedule commits post history and refreshed tokens).
+if ((Test-Path ".git") -and (git remote)) {
+    git pull --rebase --autostash origin main
+    Stop-If-Failed "could not get the latest version from GitHub (resolve it, then run again)"
+}
+
 & $python run.py set-env MEDIA_REPO $repo
 & $python run.py seal-token
 Stop-If-Failed "could not encrypt the Instagram token"
@@ -74,11 +80,13 @@ foreach ($name in @("ANTHROPIC_API_KEY", "HF_API_KEY_ID", "HF_API_KEY_SECRET", "
 }
 Write-Host "Secrets saved."
 
-Write-Host "Starting a test run (creates a carousel without publishing it)..."
-for ($i = 0; $i -lt 6; $i++) {
-    gh workflow run autopost.yml --repo $repo -f format=carousel -f publish=false 2>$null
-    if ($LASTEXITCODE -eq 0) { break }
-    Start-Sleep -Seconds 10
+if (-not $SkipTestRun) {
+    Write-Host "Starting a test run (creates a carousel without publishing it, about `$0.20)..."
+    for ($i = 0; $i -lt 6; $i++) {
+        gh workflow run autopost.yml --repo $repo -f format=carousel -f publish=false 2>$null
+        if ($LASTEXITCODE -eq 0) { break }
+        Start-Sleep -Seconds 10
+    }
 }
 Write-Host ""
 Write-Host "Done. Follow the run at https://github.com/$repo/actions" -ForegroundColor Green

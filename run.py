@@ -91,6 +91,9 @@ def cmd_seal_token() -> int:
         set_env_var("TOKEN_KEY", key)
         print("Generated TOKEN_KEY and saved it in .env")
     data = tokens.load()
+    if tokens.read_encrypted() == data:
+        print("Instagram token unchanged (state/ig_token.enc is up to date)")
+        return 0
     tokens.save(data)
     print(f"Encrypted the Instagram token into {tokens.ENCRYPTED.relative_to(ROOT)}")
     return 0
