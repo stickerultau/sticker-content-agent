@@ -1,0 +1,82 @@
+name: Content Creation Agent
+
+on:
+  schedule:
+    - cron: "0 17 * * *"       # carousel every day at 19:00 Romania time (20:00 in summer)
+    - cron: "0 11 * * 2,4,6"   # reel on Tue/Thu/Sat at 13:00 Romania time (14:00 in summer)
+  workflow_dispatch:
+    inputs:
+      format:
+        description: "What to make"
+        type: choice
+        options: [carousel, reel]
+        default: carousel
+      publish:
+        description: "Publish to Instagram (untick to only create it for review)"
+        type: boolean
+        default: true
+
+permissions:
+  contents: write
+
+concurrency:
+  group: content-agent
+  cancel-in-progress: false
+
+jobs:
+  post:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Install FFmpeg
+        run: sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Decide what to post
+        id: plan
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            echo "format=${{ inputs.format }}" >> "$GITHUB_OUTPUT"
+            if [ "${{ inputs.publish }}" = "true" ]; then echo "command=post" >> "$GITHUB_OUTPUT"; else echo "command=create" >> "$GITHUB_OUTPUT"; fi
+          else
+            if [ "${{ github.event.schedule }}" = "0 11 * * 2,4,6" ]; then echo "format=reel" >> "$GITHUB_OUTPUT"; else echo "format=carousel" >> "$GITHUB_OUTPUT"; fi
+            echo "command=post" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Run the agent
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          HF_API_KEY_ID: ${{ secrets.HF_API_KEY_ID }}
+          HF_API_KEY_SECRET: ${{ secrets.HF_API_KEY_SECRET }}
+          TOKEN_KEY: ${{ secrets.TOKEN_KEY }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: python run.py ${{ steps.plan.outputs.command }} --format ${{ steps.plan.outputs.format }}
+
+      - name: Save post history and refreshed token
+        if: always()
+        run: |
+          git config user.name "content-agent[bot]"
+          git config user.email "content-agent[bot]@users.noreply.github.com"
+          git add state/
+          if ! git diff --cached --quiet; then
+            git commit -m "chore: update agent state"
+            git push
+          fi
+
+      - name: Keep the post files for review
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: post-${{ github.run_number }}
+          path: output/
+          retention-days: 14
+          if-no-files-found: ignore

@@ -1,0 +1,89 @@
+# Page profile — the creative brief the agent follows on every run.
+# Edit freely: the agent re-reads this file on each post.
+
+page:
+  name: "Stickerul Zilei"
+  handle: "stickerul.zilei"        # username of the NEW page (without @) — update after you create it
+  shop_handle: "stickerul.tau"     # where followers order the stickers
+  cta_line: "Le vrei pe laptopul tău? Comandă pe @stickerul.tau"
+  language: "Romanian"
+  timezone: "Europe/Bucharest"
+  audience: >-
+    Young people in Romania (16-35): students, office workers, gamers, programmers, cat and dog owners,
+    coffee lovers. They decorate laptops, phones, water bottles, notebooks, cars and helmets.
+  concept: >-
+    Every post presents a themed pack of original, funny or cute sticker designs that people want to own.
+    The page is the design studio of the shop @stickerul.tau: every design shown can be printed and ordered there.
+  voice: >-
+    Warm, witty, relatable and a bit cheeky, like a friend with great taste. Natural spoken Romanian with
+    correct diacritics, short sentences, no corporate tone, no forced slang. Emojis only in captions, sparingly.
+  pillars:
+    - "Professions and student life (programmers, nurses, teachers, accountants, drivers, students in exam session)"
+    - "Romanian everyday humor (mici, sarmale, bunica, Dacia, 'lasă că merge și așa', traffic in Bucharest)"
+    - "Cute animals in funny situations (cats, dogs, capybaras, axolotls, frogs)"
+    - "Hobbies and aesthetics (coffee, gym, gaming, plants, books, travel, music)"
+    - "Seasons and occasions (Halloween, Christmas, Mărțișor, 8 Martie, Valentine's, Dragobete, summer, back to school)"
+    - "Romanian places and legends made cute (Transylvania, Carpathians, Danube Delta, castles, Dracula)"
+  rules:
+    - "Every design is ORIGINAL. Never use existing characters, mascots, celebrities, brand logos, sports clubs or trademarks."
+    - "No politics, no religion jokes, nothing offensive or sexual. Family friendly."
+    - "No text, letters or numbers inside the sticker artwork (image models misspell words)."
+  hashtags_core: ["#stickere", "#stickerultau", "#stickerepersonalizate"]
+  collaborators: []                # e.g. ["stickerul.tau"] to invite the shop as co-author of every post
+  occasions:                       # MM-DD: name — the researcher favors occasions in the next 3 weeks
+    "01-01": "Anul Nou"
+    "01-24": "Mica Unire"
+    "02-14": "Valentine's Day"
+    "02-24": "Dragobete"
+    "03-01": "Mărțișor"
+    "03-08": "Ziua Femeii (8 Martie)"
+    "04-01": "1 Aprilie, ziua păcălelilor"
+    "06-01": "Ziua Copilului"
+    "06-10": "Sesiunea de examene și Bacalaureatul"
+    "07-01": "Vacanța de vară"
+    "09-15": "Începerea școlii"
+    "10-31": "Halloween"
+    "11-27": "Black Friday"
+    "11-30": "Sfântul Andrei"
+    "12-01": "Ziua Națională a României"
+    "12-06": "Moș Nicolae"
+    "12-25": "Crăciunul"
+    "12-31": "Revelionul"
+
+brand:
+  ink: "#1C1A3A"                   # text color
+  # One palette per post, rotated so the grid stays varied but recognizable.
+  palettes:
+    - {name: "peach",  label: "soft peach",       bg: "#FFD9C7", accent: "#FF5C39"}
+    - {name: "mint",   label: "pale mint green",  bg: "#CDEFE0", accent: "#0FA37F"}
+    - {name: "lilac",  label: "pale lilac",       bg: "#E3DAFF", accent: "#7B5CFF"}
+    - {name: "butter", label: "pale butter yellow", bg: "#FFEDB0", accent: "#F29A00"}
+    - {name: "sky",    label: "pale sky blue",    bg: "#D3E8FF", accent: "#2F7DED"}
+    - {name: "rose",   label: "pale rose pink",   bg: "#FFD6E4", accent: "#E8457C"}
+
+formats:
+  carousel:
+    items: 5                       # sticker designs per carousel
+    mockup_slide: true             # extra slide with all stickers on a laptop (skipped if no model supports it)
+  reel:
+    clips: 3                       # stickers per reel
+    motion: "peel"                 # "peel" = a hand peels and sticks it; "float" = no hands, the sticker lifts and turns
+    voice: "ro-RO-AlinaNeural"     # free Microsoft neural voice; alternative: ro-RO-EmilNeural
+    voice_rate: "+6%"
+    music_volume: 0.12             # used when assets/music contains royalty-free .mp3 tracks
+
+models:
+  claude: "claude-opus-5-5"
+  effort: "high"
+  # Higgsfield API models, tried in order until one succeeds. Prices are USD (Higgsfield API, Oct 2026).
+  # IDs verified against GET https://api.higgsfield.ai/models; picked from a side-by-side sticker test.
+  sticker_image:
+    - {id: "marketing-studio/image", args: {}, price: 0.0107}
+    - {id: "ideogram/v4.0", args: {}, price: 0.03}
+    - {id: "xai/grok-imagine-image-2.0", args: {}, price: 0.04}
+  mockup_image:                    # receives the sticker images as references
+    - {id: "alibaba/qwen-image-3/edit", args: {}, refs: "image_urls", max_refs: 3, price: 0.04}
+  video:
+    - {id: "kling-video/v2.5-turbo/pro/image-to-video", args: {duration: 5, cfg_scale: 0.5}, price_per_sec: 0.021}
+    - {id: "kling-video/v2.6/pro/image-to-video", args: {duration: 5}, price_per_sec: 0.035}
+    - {id: "minimax/hailuo-2.3/standard/image-to-video", args: {duration: 6}, price_per_sec: 0.0117}
