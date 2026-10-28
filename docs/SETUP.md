@@ -79,8 +79,8 @@ the page uses about $5–8 of Claude a month.
 ## 4. Higgsfield API key
 
 <https://open.higgsfield.ai> → **Create API key**. You get a **key ID** and a **secret**, shown once →
-`HF_API_KEY_ID` and `HF_API_KEY_SECRET`. Top up $80 or more: daily carousels use about $43 a month (5 images ×
-$0.277 + the mockup) and 3 reels a week about $25–40. The API is pay-as-you-go and separate from Higgsfield app plans (app credits do
+`HF_API_KEY_ID` and `HF_API_KEY_SECRET`. Top up $60 or more: daily carousels use about $43 a month (5 images ×
+$0.277 + the mockup) and the weekly reel about $8–13. The API is pay-as-you-go and separate from Higgsfield app plans (app credits do
 not work for the API, and API generations don't appear in the app's library). Model choices are explained in
 [OPERATIONS.md → Models](OPERATIONS.md#models).
 
@@ -152,5 +152,5 @@ password-based posting tools (high ban risk for new accounts).
 | Permissions | `instagram_business_basic`, `instagram_business_content_publish`; the page is an accepted Instagram Tester |
 | GitHub repository | [stickerultau/sticker-content-agent](https://github.com/stickerultau/sticker-content-agent) (public); branches `main` (code and state) and `media` (current post's files) |
 | Secrets | GitHub Actions: `ANTHROPIC_API_KEY`, `HF_API_KEY_ID`, `HF_API_KEY_SECRET`, `TOKEN_KEY`; Instagram token encrypted in `state/ig_token.enc` |
-| Schedule | `.github/workflows/autopost.yml`: carousel daily 17:00 UTC; reel Tue/Thu/Sat 11:00 UTC |
+| Schedule | `.github/workflows/autopost.yml`: carousel daily 17:00 UTC; reel every Friday 18:00 UTC |
 | First post | <https://www.instagram.com/p/DfBBcQrDP-F/> (28 Oct 2026) |

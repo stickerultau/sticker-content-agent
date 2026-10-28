@@ -3,7 +3,7 @@ name: Content Creation Agent
 on:
   schedule:
     - cron: "0 17 * * *"       # carousel every day at 19:00 Romania time (20:00 in summer)
-    - cron: "0 11 * * 2,4,6"   # reel on Tue/Thu/Sat at 13:00 Romania time (14:00 in summer); "#" in front pauses it
+    - cron: "0 18 * * 5"       # reel every Friday at 20:00 Romania time (21:00 in summer); "#" in front pauses it
   workflow_dispatch:
     inputs:
       format:
@@ -48,7 +48,7 @@ jobs:
             echo "format=${{ inputs.format }}" >> "$GITHUB_OUTPUT"
             if [ "${{ inputs.publish }}" = "true" ]; then echo "command=post" >> "$GITHUB_OUTPUT"; else echo "command=create" >> "$GITHUB_OUTPUT"; fi
           else
-            if [ "${{ github.event.schedule }}" = "0 11 * * 2,4,6" ]; then echo "format=reel" >> "$GITHUB_OUTPUT"; else echo "format=carousel" >> "$GITHUB_OUTPUT"; fi
+            if [ "${{ github.event.schedule }}" = "0 18 * * 5" ]; then echo "format=reel" >> "$GITHUB_OUTPUT"; else echo "format=carousel" >> "$GITHUB_OUTPUT"; fi
             echo "command=post" >> "$GITHUB_OUTPUT"
           fi
 

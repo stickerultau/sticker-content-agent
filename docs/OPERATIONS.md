@@ -4,8 +4,8 @@ How the automation runs, where its secrets live, and how to change, update, fix 
 
 ## How a scheduled run works
 
-GitHub Actions starts `.github/workflows/autopost.yml` on schedule (carousel daily 17:00 UTC; reel Tue/Thu/Sat
-11:00 UTC; Romania is UTC+2 in winter and UTC+3 in summer). Each run:
+GitHub Actions starts `.github/workflows/autopost.yml` on schedule (carousel daily 17:00 UTC; reel every Friday
+18:00 UTC; Romania is UTC+2 in winter and UTC+3 in summer). Each run:
 
 1. installs FFmpeg and the Python packages;
 2. runs `python run.py post --format carousel|reel`:
@@ -143,7 +143,12 @@ Each run's log and GitHub summary show the post's cost and the month so far. `bu
 `config/page.yaml` (default $60) stops new posts once the month's logged spend reaches it; raise it to continue.
 Typical costs: carousel ≈ $1.55 (5 images × $0.277, mockup $0.04, Claude ≈ $0.12); reel ≈ $2.20 with `ai_clips`
 (surface $0.21, 4 edits × $0.075, 4 clips × $0.357, checks and Claude ≈ $0.26), plus $0.08–0.38 for each edit or clip
-made again, so ≈ $2.20–3.30; ≈ $1.15 with `placed`. A month of daily carousels and 3 reels a week ≈ $75–90.
+made again, so ≈ $2.20–3.30; ≈ $1.15 with `placed`. A month of daily carousels and a weekly reel ≈ $56–61.
+
+Post shape: slides are 1080×1350 (4:5), the tallest shape Instagram's API accepts for feed images (its documented
+range is 4:5 to 1.91:1; the app's newer 3:4 uploads aren't in that range). The shape asked from the image model
+(`aspect_ratio` in `agent/visuals.py`) only decides how much is cropped and what Higgsfield charges, not what
+Instagram shows.
 
 Balances: Claude at <https://console.anthropic.com> (Billing), Higgsfield API at <https://open.higgsfield.ai>
 (separate from Higgsfield app plans). A run fails with a clear message when a balance is empty; set low-balance

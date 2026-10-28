@@ -12,7 +12,7 @@ Claude + trends   Claude   Higgsfield  brand templates   Instagram API
 | What | When (Romania time) | Made of |
 |---|---|---|
 | Carousel: a themed pack of 5 sticker designs | every day, 19:00 | cover, 5 numbered stickers (each in one of the shop's materials: glossy, matte, holographic, transparent, electrostatic, epoxy 3D), a real-life mockup (laptop, car, shop window…), "pick your favorite" slide |
-| Reel: 4 stickers for the day's theme land one by one on a surface that fits it | Tue, Thu, Sat, 13:00 | about 9 s, no voiceover: opens on the finished result and rewinds, a hook that only the last sticker answers, a 1/4 → 4/4 counter with each sticker's material (all different), funnier and funnier up to a punchline sticker that catches the light, ends where it began so it loops; every landing filmed by AI (Kling O3) with its own slap sound and checked by Claude |
+| Reel: 4 stickers for the day's theme land one by one on a surface that fits it | every Friday, 20:00 (that day's carousel still comes at 19:00) | about 9 s, no voiceover: opens on the finished result and rewinds, a hook that only the last sticker answers, a 1/4 → 4/4 counter with each sticker's material (all different), funnier and funnier up to a punchline sticker that catches the light, ends where it began so it loops; every landing filmed by AI (Kling O3) with its own slap sound and checked by Claude |
 
 It runs on **GitHub Actions**, so no computer needs to be on. Each run picks a fresh theme from upcoming occasions,
 today's Google Trends in Romania and the post history, so themes don't repeat. Cost at Higgsfield's real rates:
