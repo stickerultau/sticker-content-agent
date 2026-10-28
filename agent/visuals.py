@@ -11,10 +11,18 @@ from . import log
 from .higgsfield import Higgsfield, HiggsfieldError
 
 STICKER = (
-    "ONE glossy die-cut vinyl sticker. The sticker artwork: {design}. Bold clean outlines, vibrant saturated colors, "
-    "smooth cel shading, cute cartoon illustration, a thick even white die-cut border around the whole shape "
-    "with a subtle glossy highlight"
+    "ONE {material}. The sticker artwork: {design}. Bold clean outlines, vibrant saturated colors, "
+    "smooth cel shading, cute cartoon illustration"
 )
+
+
+def material_prompt(cfg: dict, name: str) -> str:
+    """English description of a shop material for the image model (falls back to the first material)."""
+    materials = cfg["page"]["shop_offer"]["materials"]
+    for material in materials:
+        if material["name"].lower() == (name or "").lower():
+            return material["prompt"]
+    return materials[0]["prompt"]
 
 PRODUCT_SHOT = (
     "Premium studio product photograph, seen from directly above: " + STICKER + ". The sticker lies flat, centered, "
@@ -44,9 +52,9 @@ MOTION = {
 NEGATIVE = "blurry, distorted hands, extra fingers, warped or melting sticker, changing artwork, text, watermark"
 
 MOCKUP = (
-    "Photorealistic lifestyle photo: the stickers from the reference images, each with exactly the same artwork, stuck on "
-    "{scene}. Real glossy vinyl with white die-cut borders, natural light, slight perspective, shallow depth of field, "
-    "high-end commercial photography. Keep every sticker design faithful. No text, no logos."
+    "Photorealistic lifestyle photo: the stickers from the reference images, each with exactly the same artwork and "
+    "finish, stuck on {scene}. Real printed stickers with die-cut edges, natural light, slight perspective, shallow "
+    "depth of field, high-end commercial photography. Keep every sticker design faithful. No text, no logos."
 )
 
 
@@ -57,7 +65,8 @@ def carousel_images(hf: Higgsfield, cfg: dict, copy: dict, palette: dict, folder
 
     def one(index_item):
         index, item = index_item
-        prompt = PRODUCT_SHOT.format(design=item["design"], bg_label=palette["label"], bg_hex=palette["bg"])
+        prompt = PRODUCT_SHOT.format(material=material_prompt(cfg, item.get("material")), design=item["design"],
+                                     bg_label=palette["label"], bg_hex=palette["bg"])
         result = hf.generate(models["sticker_image"], prompt, folder / f"item_{index:02d}.jpg",
                              extra={"aspect_ratio": "3:4"})
         log.info(f"  #{index} {item['name']}  ({result['model']})")
@@ -86,7 +95,8 @@ def reel_media(hf: Higgsfield, cfg: dict, copy: dict, folder: Path) -> list[dict
 
     def frame(index_clip):
         index, clip = index_clip
-        prompt = START_FRAME.format(design=clip["design"], surface=clip["surface"], target=clip["target"])
+        prompt = START_FRAME.format(material=material_prompt(cfg, clip.get("material")), design=clip["design"],
+                                    surface=clip["surface"], target=clip["target"])
         return hf.generate(models["sticker_image"], prompt, folder / f"frame_{index:02d}.jpg",
                            extra={"aspect_ratio": "9:16"})
 

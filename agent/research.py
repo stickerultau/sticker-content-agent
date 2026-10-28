@@ -19,12 +19,15 @@ def system_prompt(cfg: dict) -> str:
     page = cfg["page"]
     pillars = "\n".join(f"- {p}" for p in page["pillars"])
     rules = "\n".join(f"- {r}" for r in page["rules"])
+    offer = page.get("shop_offer", {})
+    surfaces = "; ".join(offer.get("surfaces", []))
+    materials = ", ".join(m["name"] for m in offer.get("materials", []))
     return f"""You are the creative director of "{page['name']}" (@{page['handle']}), an Instagram page in Romania that publishes original sticker designs.
 {page['concept']}
 
 Audience: {page['audience']}
 Voice: {page['voice']}
-Shop: followers order any design at @{page['shop_handle']}.
+Shop: followers order any design at @{page['shop_handle']}, printed on any surface ({surfaces}) and in these materials: {materials}.
 
 Content pillars:
 {pillars}

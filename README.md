@@ -11,7 +11,7 @@ Claude + trends   Claude   Higgsfield  brand templates   Instagram API
 
 | What | When (Romania time) | Made of |
 |---|---|---|
-| Carousel: a themed pack of 5 sticker designs | every day, 19:00 | cover, 5 numbered stickers, laptop mockup, "pick your favorite" slide |
+| Carousel: a themed pack of 5 sticker designs | every day, 19:00 | cover, 5 numbered stickers (each in one of the shop's materials: glossy, matte, holographic, transparent, electrostatic, epoxy 3D), a real-life mockup (laptop, car, shop window…), "pick your favorite" slide |
 | Reel: 3 stickers peeled and stuck on objects | Tue, Thu, Sat, 13:00 | AI video clips, Romanian voiceover, animated captions, end card |
 
 It runs on **GitHub Actions**, so no computer needs to be on. Each run picks a fresh theme from upcoming occasions,

@@ -290,6 +290,10 @@ def carousel_item(item: dict, index: int, total: int, image: Image.Image, palett
     panel = Image.new("RGBA", (box[2] - box[0], card_h), (255, 255, 255, 236))
     panel.putalpha(rounded_mask(panel.size, 40).point(lambda v: v * 236 // 255))
     place(canvas, panel, ((box[0] + box[2]) // 2, (box[1] + box[3]) // 2), shadow=45, blur=24, drop=10)
+    material = item.get("material")
+    if material:  # which of the shop's materials this design is shown in
+        pill(canvas, (box[0] + 40, box[1] - 26), material[0].upper() + material[1:], font("BrandBodyBold", 26),
+             rgb(palette["accent"]), (255, 255, 255), height=52, pad_x=22)
     y = box[1] + 44 + name_font.getmetrics()[0] - 6
     draw.text((box[0] + 44, y), name_lines[0], font=name_font, fill=rgb(ink), anchor="ls")
     y += 18 + line_h - 4
@@ -352,7 +356,7 @@ def carousel_cta(copy: dict, images: list[Image.Image], palette: dict, brand: di
     grid_h = rows * int(card_w * 1.25) + (rows - 1) * (gap + 6)
     pill_top = H - 118
     numbered_grid(canvas, images, int(y + (pill_top - y - grid_h) / 2), card_w, gap, ink, accent, W)
-    shop_pill(canvas, page["cta_line"], pill_top, accent)
+    shop_pill(canvas, copy.get("shop_cta") or page["cta_line"], pill_top, accent)
     return canvas.convert("RGB")
 
 
@@ -421,7 +425,7 @@ def reel_end_card(copy: dict, frames: list[Image.Image], palette: dict, brand: d
         draw.text((RW // 2, y + 6), line, font=sub_font, fill=rgb(ink, 200), anchor="ms")
         y += int(sub_font.size * 1.3)
     numbered_grid(canvas, frames, y + 60, 290 if len(frames) <= 3 else 250, 28, ink, accent, RW)
-    shop_pill(canvas, page["cta_line"], 1470, accent, width=RW, height=92)
+    shop_pill(canvas, copy.get("shop_cta") or page["cta_line"], 1470, accent, width=RW, height=92)
     draw.text((RW // 2, 1640), "@" + page["handle"], font=font("BrandBodyBold", 32), fill=rgb(ink, 190), anchor="ms")
     return canvas.convert("RGB")
 

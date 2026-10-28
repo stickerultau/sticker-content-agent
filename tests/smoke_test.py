@@ -59,15 +59,17 @@ class FakeClaude:
                                "pillar": "Profesii", "occasion": "", "why": "test"}}
         common = {"caption": "Hook de test\nA doua linie", "hashtags": ["stickere", "#Programare", "#dev ops"]}
         if "items" in props:
+            materials = ["holografic", "EPOXY 3d", "unknown finish", "vinil mat", "transparent", "vinil lucios"]
             items = [{"name": f"Stickerul ş {i}", "line": "O replică de test ţ", "design": "a cute cat",
-                      "alt_text": "alt"} for i in range(1, 7)]
+                      "material": materials[i - 1], "alt_text": "alt"} for i in range(1, 7)]
             return {"kicker": "PACHETUL ZILEI", "title": "Stickere pentru *devii* de vineri", "items": items,
-                    "mockup_scene": "a laptop", "mockup_label": "Așa arată pe laptop",
-                    "cta_title": "Care e preferatul tău?", "cta_sub": "Scrie numărul", **common}
-        clips = [{"name": f"Clip {i}", "design": "d", "surface": "desk", "target": "laptop",
-                  "narration": "O replică de test pentru acest clip."} for i in range(1, 4)]
+                    "mockup_scene": "a car's rear window", "mockup_label": "Așa arată pe mașină",
+                    "cta_title": "Care e preferatul tău?", "cta_sub": "Scrie numărul",
+                    "shop_cta": "Le vrei pe mașină? Le printăm și holografic", **common}
+        clips = [{"name": f"Clip {i}", "design": "d", "material": "holografic", "surface": "desk",
+                  "target": "laptop", "narration": "O replică de test pentru acest clip."} for i in range(1, 4)]
         return {"hook": "Trei stickere de test", "cta": "Scrie preferatul în comentarii", "clips": clips,
-                "end_title": "Care e preferatul tău?", "end_sub": "Scrie numărul", **common}
+                "end_title": "Care e preferatul tău?", "end_sub": "Scrie numărul", "shop_cta": "", **common}
 
 
 class FakeHiggsfield:
@@ -181,12 +183,18 @@ def main() -> int:
         print("ok  encrypted token storage")
 
         # Full runs
+        shop = "@" + cfg["page"]["shop_handle"]
         for fmt in ("carousel", "reel"):
             post_dir = pipeline.create(cfg, fmt)
             pipeline.publish(cfg, post_dir)
             post = json.loads((post_dir / "post.json").read_text(encoding="utf-8"))
+            copy = json.loads((post_dir / "copy.json").read_text(encoding="utf-8"))
             assert post["published"]["permalink"].startswith("https://www.instagram.com/")
-            print(f"ok  {fmt}: {len(post['media'])} file(s) -> {post['published']['permalink']}")
+            assert copy["shop_cta"].endswith(shop) or copy["shop_cta"] == cfg["page"]["cta_line"]
+            if fmt == "carousel":
+                assert [i["material"] for i in copy["items"]] == \
+                    ["holografic", "epoxy 3D", "vinil lucios", "vinil mat", "transparent"], copy["items"]
+            print(f"ok  {fmt}: {len(post['media'])} file(s), shop line \"{copy['shop_cta']}\"")
         assert len(published["carousel"]) == 2 + cfg["formats"]["carousel"]["items"] + 1  # cover, items, mockup, cta
         assert [h["format"] for h in state.load()] == ["carousel", "reel"]
         print("\nALL CHECKS PASSED")

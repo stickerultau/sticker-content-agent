@@ -63,7 +63,9 @@ Delete the `TOKEN_KEY` line from `.env`, put a fresh `IG_ACCESS_TOKEN` in `.env`
 
 | To change | Edit, then commit and push |
 |---|---|
-| Tone, topics, rules, occasions, hashtags, CTA line, colors, stickers per post | `config/page.yaml` |
+| Tone, topics, rules, occasions, hashtags, colors, stickers per post | `config/page.yaml` |
+| What the shop offers: surfaces mentioned in captions and closing slides, and the materials stickers are shown in (glossy and matte vinyl, holographic, transparent, epoxy 3D, electrostatic) | `page.shop_offer` in `config/page.yaml`; each material has a Romanian name (shown on the slide), an English description (for the image model) and an optional hint telling Claude when to use it |
+| Fallback shop line (used only if a post has none) | `page.cta_line` |
 | Posting times or days | the `cron` lines in `.github/workflows/autopost.yml`; the "Decide what to post" step maps each time to a format |
 | Reel motion (hands that peel vs. no hands) | `formats.reel.motion`: `"peel"` or `"float"` |
 | Voice | `formats.reel.voice` (`ro-RO-AlinaNeural` or `ro-RO-EmilNeural`) |

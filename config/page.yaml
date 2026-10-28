@@ -5,7 +5,7 @@ page:
   name: "Stickerul Zilei"
   handle: "stickerul.zilei"        # username of the NEW page (without @) — update after you create it
   shop_handle: "stickerul.tau"     # where followers order the stickers
-  cta_line: "Le vrei pe laptopul tău? Comandă pe @stickerul.tau"
+  cta_line: "Le printăm pe orice suprafață → @stickerul.tau"   # fallback; each post writes its own
   language: "Romanian"
   timezone: "Europe/Bucharest"
   audience: >-
@@ -13,7 +13,9 @@ page:
     coffee lovers. They decorate laptops, phones, water bottles, notebooks, cars and helmets.
   concept: >-
     Every post presents a themed pack of original, funny or cute sticker designs that people want to own.
-    The page is the design studio of the shop @stickerul.tau: every design shown can be printed and ordered there.
+    The page is the design studio of the shop @stickerul.tau: every design shown can be printed and ordered there,
+    on any surface and in many materials (see the shop offer). Posts should make people discover that range too,
+    not only laptop stickers.
   voice: >-
     Warm, witty, relatable and a bit cheeky, like a friend with great taste. Natural spoken Romanian with
     correct diacritics, short sentences, no corporate tone, no forced slang. Emojis only in captions, sparingly.
@@ -24,6 +26,24 @@ page:
     - "Hobbies and aesthetics (coffee, gym, gaming, plants, books, travel, music)"
     - "Seasons and occasions (Halloween, Christmas, Mărțișor, 8 Martie, Valentine's, Dragobete, summer, back to school)"
     - "Romanian places and legends made cute (Transylvania, Carpathians, Danube Delta, castles, Dracula)"
+    - "Business and HoReCa: stickers for cafés, restaurants, bars, shops, shop windows, menus, doors and cars of small businesses"
+  # What @stickerul.tau can produce. Claude mentions what fits each post; materials are shown in the images.
+  shop_offer:
+    surfaces:
+      - "laptopuri, telefoane, tablete"
+      - "sticle, căni, agende"
+      - "mașini și căști moto"
+      - "vitrine și geamuri"
+      - "HoReCa: meniuri, uși, mese, pahare"
+      - "obiecte personalizate"
+      - "canvasuri"
+    materials:   # name = what followers read (Romanian); prompt = how the image model draws it (English)
+      - {name: "vinil lucios", prompt: "glossy die-cut vinyl sticker with a thick even white border and a subtle glossy highlight"}
+      - {name: "vinil mat", prompt: "matte die-cut vinyl sticker with a soft non-reflective finish and a thick even white border"}
+      - {name: "holografic", prompt: "holographic die-cut vinyl sticker with a rainbow iridescent shimmer across its whole surface and a thick even white border"}
+      - {name: "transparent", prompt: "transparent die-cut sticker printed on clear glossy film, the background visible through the clear areas around the artwork, with a thin shiny clear edge"}
+      - {name: "epoxy 3D", prompt: "3D epoxy dome sticker: the artwork is covered by a thick, perfectly clear, glossy resin dome that is visibly raised and catches the light"}
+      - {name: "electrostatic", hint: "for windows, shop windows and car glass: no glue, removable and reusable", prompt: "electrostatic static-cling decal printed on thin, flexible, slightly glossy film with a clean die-cut edge and a faint clear border, lying perfectly flat"}
   rules:
     - "Every design is ORIGINAL. Never use existing characters, mascots, celebrities, brand logos, sports clubs or trademarks."
     - "No politics, no religion jokes, nothing offensive or sexual. Family friendly."
