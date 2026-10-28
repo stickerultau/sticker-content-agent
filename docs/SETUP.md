@@ -29,15 +29,15 @@ manager: GitHub stores them write-only, so you cannot read them back later.
    In the app: Settings → Account type and tools → Switch to professional account.
 3. **Name**: Accounts Center → Profiles → the account → **Name** → `Stickerul Zilei | Stickere noi zilnic` → Done.
    Instagram allows only 2 name changes per 14 days, and the name is searchable, so keep the word "stickere".
-4. **Bio**: <https://www.instagram.com/accounts/edit/> → Bio → Submit (144 of 150 characters):
+4. **Bio**: <https://www.instagram.com/accounts/edit/> → Bio → Submit (141 of 150 characters):
    ```
-   Stickere noi în fiecare zi ✨
-   Pe mașini, vitrine, laptopuri, orice
+   Le printăm pe orice 👉 @stickerul.tau
+   Mașini, vitrine, laptopuri, HoReCa, canvas
    Lucios, mat, holografic, transparent, electrostatic, epoxy 3D
-   👉 @stickerul.tau
    ```
-   It names the surfaces with the most pull (cars: the biggest sticker market; shop windows: business and HoReCa
-   clients; laptops: the page's audience; "orice" covers the rest) and every material, and ends with the shop.
+   Phones show only about 3 bio lines before "more", so the shop goes on line 1 and the first lines stay short
+   enough not to wrap. The name above already says what the page is ("Stickere noi zilnic"), so the bio starts with
+   the offer: any surface (line 2) and every material (line 3).
    AI is disclosed where it matters, on each post (the automatic "AI content" label), not in the bio.
    Leave **AI-generated profile** off in Edit profile: that label is only for accounts showing an AI-generated person.
 5. **Profile picture**: Accounts Center → Profile picture → Upload new photo → `assets/brand/profile_picture.jpg`
