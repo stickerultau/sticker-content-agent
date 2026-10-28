@@ -11,7 +11,8 @@ from .llm import INT, STR, Claude, arr, obj
 
 FORMAT_BRIEF = {
     "carousel": "a carousel presenting a themed pack of {n} original sticker designs",
-    "reel": "a short vertical video where {n} sticker designs are peeled off their sheet and stuck onto everyday objects",
+    "reel": ("a 9-second vertical video without voiceover where {n} sticker designs land one by one on a real surface "
+             "(a laptop, a car window, a shop window, a fridge, a notebook...) until it is covered"),
 }
 
 
@@ -67,7 +68,9 @@ def google_trends(geo: str = "RO", limit: int = 15) -> list[str]:
 
 
 def research(claude: Claude, cfg: dict, fmt: str, recent: list[str], today: dt.date) -> dict:
-    count = cfg["formats"][fmt]["items" if fmt == "carousel" else "clips"]
+    count = cfg["formats"][fmt]["items" if fmt == "carousel" else "stickers"]
+    reel_rule = ("\n- For a reel: pick a theme whose people will recognize themselves in it and send it to friends, with "
+                 "room for designs that build up to a punchline sticker at the end.") if fmt == "reel" else ""
     occasions = upcoming_occasions(cfg["page"]["occasions"], today)
     trends = google_trends()
     log.info(f"{len(occasions)} upcoming occasions, {len(trends)} trending searches, {len(recent)} past posts")
@@ -88,7 +91,7 @@ Brainstorm 6 clearly different themes for today's post. Score each from 1 to 10 
 Guidelines:
 - Use an upcoming occasion when it is close, but keep at most about 1 post in 3 seasonal. Otherwise rotate pillars compared to the recent history.
 - Specific beats generic: "stickere pentru programatorii care fac deploy vinerea" beats "stickere pentru programatori".
-- The theme must support {count} visually different designs.
+- The theme must support {count} visually different designs.{reel_rule}
 Write theme, angle and why in Romanian. "occasion" is the occasion name, or an empty string."""
 
     schema = obj(

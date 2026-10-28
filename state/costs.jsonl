@@ -3,3 +3,70 @@
 {"at": "2026-10-28T11:00:40+00:00", "post": "qa-test", "service": "anthropic", "model": "claude-opus-5-5", "usd": 0.0243}
 {"at": "2026-10-28T11:00:45+00:00", "post": "qa-test", "service": "anthropic", "model": "claude-opus-5-5", "usd": 0.0169}
 {"at": "2026-10-28T11:00:53+00:00", "post": "qa-test", "service": "anthropic", "model": "claude-opus-5-5", "usd": 0.0203}
+{"at": "2026-10-28T11:38:30+00:00", "post": "2026-10-28_1337_reel", "service": "anthropic", "model": "claude-opus-5-5", "usd": 0.0524}
+{"at": "2026-10-28T11:38:56+00:00", "post": "2026-10-28_1337_reel", "service": "anthropic", "model": "claude-opus-5-5", "usd": 0.0554}
+{"at": "2026-10-28T11:40:13+00:00", "post": "2026-10-28_1337_reel", "service": "higgsfield", "model": "marketing-studio/image", "usd": 0.212, "detail": "scene_00.jpg"}
+{"at": "2026-10-28T11:41:03+00:00", "post": "2026-10-28_1337_reel", "service": "higgsfield", "model": "alibaba/qwen-image-3/edit", "usd": 0.075, "detail": "scene_01.jpg"}
+{"at": "2026-10-28T11:41:10+00:00", "post": "2026-10-28_1337_reel", "service": "anthropic", "model": "claude-opus-5-5", "usd": 0.0168}
+{"at": "2026-10-28T11:41:51+00:00", "post": "2026-10-28_1337_reel", "service": "higgsfield", "model": "alibaba/qwen-image-3/edit", "usd": 0.075, "detail": "scene_01_b.jpg"}
+{"at": "2026-10-28T11:41:59+00:00", "post": "2026-10-28_1337_reel", "service": "anthropic", "model": "claude-opus-5-5", "usd": 0.0186}
+{"at": "2026-10-28T11:43:00+00:00", "post": "2026-10-28_1337_reel", "service": "higgsfield", "model": "alibaba/qwen-image-3/edit", "usd": 0.075, "detail": "scene_02.jpg"}
+{"at": "2026-10-28T11:43:10+00:00", "post": "2026-10-28_1337_reel", "service": "anthropic", "model": "claude-opus-5-5", "usd": 0.0173}
+{"at": "2026-10-28T11:44:01+00:00", "post": "2026-10-28_1337_reel", "service": "higgsfield", "model": "alibaba/qwen-image-3/edit", "usd": 0.075, "detail": "scene_02_b.jpg"}
+{"at": "2026-10-28T11:44:06+00:00", "post": "2026-10-28_1337_reel", "service": "anthropic", "model": "claude-opus-5-5", "usd": 0.0126}
+{"at": "2026-10-28T11:44:53+00:00", "post": "2026-10-28_1337_reel", "service": "higgsfield", "model": "alibaba/qwen-image-3/edit", "usd": 0.075, "detail": "scene_03.jpg"}
+{"at": "2026-10-28T11:45:02+00:00", "post": "2026-10-28_1337_reel", "service": "anthropic", "model": "claude-opus-5-5", "usd": 0.0195}
+{"at": "2026-10-28T11:45:59+00:00", "post": "2026-10-28_1337_reel", "service": "higgsfield", "model": "alibaba/qwen-image-3/edit", "usd": 0.075, "detail": "scene_03_b.jpg"}
+{"at": "2026-10-28T11:46:06+00:00", "post": "2026-10-28_1337_reel", "service": "anthropic", "model": "claude-opus-5-5", "usd": 0.0162}
+{"at": "2026-10-28T11:47:00+00:00", "post": "2026-10-28_1337_reel", "service": "higgsfield", "model": "alibaba/qwen-image-3/edit", "usd": 0.075, "detail": "scene_04.jpg"}
+{"at": "2026-10-28T11:47:11+00:00", "post": "2026-10-28_1337_reel", "service": "anthropic", "model": "claude-opus-5-5", "usd": 0.022}
+{"at": "2026-10-28T11:49:17+00:00", "post": "2026-10-28_1337_reel", "service": "higgsfield", "model": "kling-video/o3/first-last-frame", "usd": 0.357, "detail": "clip_03.mp4"}
+{"at": "2026-10-28T11:49:17+00:00", "post": "2026-10-28_1337_reel", "service": "higgsfield", "model": "kling-video/o3/first-last-frame", "usd": 0.357, "detail": "clip_01.mp4"}
+{"at": "2026-10-28T11:49:25+00:00", "post": "2026-10-28_1337_reel", "service": "anthropic", "model": "claude-opus-5-5", "usd": 0.0187}
+{"at": "2026-10-28T11:49:26+00:00", "post": "2026-10-28_1337_reel", "service": "anthropic", "model": "claude-opus-5-5", "usd": 0.025}
+{"at": "2026-10-28T11:49:27+00:00", "post": "2026-10-28_1337_reel", "service": "higgsfield", "model": "kling-video/o3/first-last-frame", "usd": 0.357, "detail": "clip_02.mp4"}
+{"at": "2026-10-28T11:49:27+00:00", "post": "2026-10-28_1337_reel", "service": "higgsfield", "model": "kling-video/o3/first-last-frame", "usd": 0.357, "detail": "clip_04.mp4"}
+{"at": "2026-10-28T11:49:34+00:00", "post": "2026-10-28_1337_reel", "service": "anthropic", "model": "claude-opus-5-5", "usd": 0.0162}
+{"at": "2026-10-28T11:49:43+00:00", "post": "2026-10-28_1337_reel", "service": "anthropic", "model": "claude-opus-5-5", "usd": 0.0322}
+{"at": "2026-10-28T11:52:02+00:00", "post": "2026-10-28_1337_reel", "service": "higgsfield", "model": "kling-video/o3/first-last-frame", "usd": 0.357, "detail": "clip_01_b.mp4"}
+{"at": "2026-10-28T11:52:12+00:00", "post": "2026-10-28_1337_reel", "service": "anthropic", "model": "claude-opus-5-5", "usd": 0.0245}
+{"at": "2026-10-28T11:52:30+00:00", "post": "2026-10-28_1337_reel", "service": "higgsfield", "model": "kling-video/o3/first-last-frame", "usd": 0.357, "detail": "clip_04_b.mp4"}
+{"at": "2026-10-28T11:52:42+00:00", "post": "2026-10-28_1337_reel", "service": "anthropic", "model": "claude-opus-5-5", "usd": 0.0254}
+{"at": "2026-10-28T12:56:33+00:00", "post": "2026-10-28_1337_reel", "service": "higgsfield", "model": "marketing-studio/image", "usd": 0.213, "detail": "scene_00.jpg"}
+{"at": "2026-10-28T12:57:26+00:00", "post": "2026-10-28_1337_reel", "service": "higgsfield", "model": "alibaba/qwen-image-3/edit", "usd": 0.075, "detail": "scene_01.jpg"}
+{"at": "2026-10-28T12:57:32+00:00", "post": "2026-10-28_1337_reel", "service": "anthropic", "model": "claude-opus-5-5", "usd": 0.0161}
+{"at": "2026-10-28T12:58:32+00:00", "post": "2026-10-28_1337_reel", "service": "higgsfield", "model": "alibaba/qwen-image-3/edit", "usd": 0.075, "detail": "scene_02.jpg"}
+{"at": "2026-10-28T12:58:37+00:00", "post": "2026-10-28_1337_reel", "service": "anthropic", "model": "claude-opus-5-5", "usd": 0.0164}
+{"at": "2026-10-28T12:59:30+00:00", "post": "2026-10-28_1337_reel", "service": "higgsfield", "model": "alibaba/qwen-image-3/edit", "usd": 0.075, "detail": "scene_02_b.jpg"}
+{"at": "2026-10-28T12:59:35+00:00", "post": "2026-10-28_1337_reel", "service": "anthropic", "model": "claude-opus-5-5", "usd": 0.0162}
+{"at": "2026-10-28T13:00:25+00:00", "post": "2026-10-28_1337_reel", "service": "higgsfield", "model": "alibaba/qwen-image-3/edit", "usd": 0.075, "detail": "scene_03.jpg"}
+{"at": "2026-10-28T13:00:34+00:00", "post": "2026-10-28_1337_reel", "service": "anthropic", "model": "claude-opus-5-5", "usd": 0.0176}
+{"at": "2026-10-28T13:01:21+00:00", "post": "2026-10-28_1337_reel", "service": "higgsfield", "model": "alibaba/qwen-image-3/edit", "usd": 0.075, "detail": "scene_04.jpg"}
+{"at": "2026-10-28T13:01:30+00:00", "post": "2026-10-28_1337_reel", "service": "anthropic", "model": "claude-opus-5-5", "usd": 0.0232}
+{"at": "2026-10-28T13:02:11+00:00", "post": "2026-10-28_1337_reel", "service": "higgsfield", "model": "alibaba/qwen-image-3/edit", "usd": 0.075, "detail": "scene_04_b.jpg"}
+{"at": "2026-10-28T13:02:17+00:00", "post": "2026-10-28_1337_reel", "service": "anthropic", "model": "claude-opus-5-5", "usd": 0.0187}
+{"at": "2026-10-28T13:05:04+00:00", "post": "2026-10-28_1337_reel", "service": "higgsfield", "model": "kling-video/o3/first-last-frame", "usd": 0.357, "detail": "clip_02.mp4"}
+{"at": "2026-10-28T13:05:04+00:00", "post": "2026-10-28_1337_reel", "service": "higgsfield", "model": "kling-video/o3/first-last-frame", "usd": 0.357, "detail": "clip_04.mp4"}
+{"at": "2026-10-28T13:05:13+00:00", "post": "2026-10-28_1337_reel", "service": "anthropic", "model": "claude-opus-5-5", "usd": 0.0251}
+{"at": "2026-10-28T13:05:13+00:00", "post": "2026-10-28_1337_reel", "service": "anthropic", "model": "claude-opus-5-5", "usd": 0.0249}
+{"at": "2026-10-28T13:05:14+00:00", "post": "2026-10-28_1337_reel", "service": "higgsfield", "model": "kling-video/o3/first-last-frame", "usd": 0.357, "detail": "clip_03.mp4"}
+{"at": "2026-10-28T13:05:23+00:00", "post": "2026-10-28_1337_reel", "service": "anthropic", "model": "claude-opus-5-5", "usd": 0.0261}
+{"at": "2026-10-28T13:05:24+00:00", "post": "2026-10-28_1337_reel", "service": "higgsfield", "model": "kling-video/o3/first-last-frame", "usd": 0.357, "detail": "clip_01.mp4"}
+{"at": "2026-10-28T13:05:32+00:00", "post": "2026-10-28_1337_reel", "service": "anthropic", "model": "claude-opus-5-5", "usd": 0.0233}
+{"at": "2026-10-28T13:07:58+00:00", "post": "2026-10-28_1337_reel", "service": "higgsfield", "model": "kling-video/o3/first-last-frame", "usd": 0.357, "detail": "clip_04_b.mp4"}
+{"at": "2026-10-28T13:08:10+00:00", "post": "2026-10-28_1337_reel", "service": "anthropic", "model": "claude-opus-5-5", "usd": 0.0259}
+{"at": "2026-10-28T13:08:17+00:00", "post": "2026-10-28_1337_reel", "service": "higgsfield", "model": "kling-video/o3/first-last-frame", "usd": 0.357, "detail": "clip_01_b.mp4"}
+{"at": "2026-10-28T13:08:27+00:00", "post": "2026-10-28_1337_reel", "service": "anthropic", "model": "claude-opus-5-5", "usd": 0.0256}
+{"at": "2026-10-28T13:55:12+00:00", "post": "2026-10-28_1337_reel", "service": "anthropic", "model": "claude-opus-5-5", "usd": 0.0161}
+{"at": "2026-10-28T13:56:48+00:00", "post": "2026-10-28_1337_reel", "service": "higgsfield", "model": "marketing-studio/image", "usd": 0.192, "detail": "sticker_02.png"}
+{"at": "2026-10-28T13:56:51+00:00", "post": "2026-10-28_1337_reel", "service": "higgsfield", "model": "marketing-studio/image", "usd": 0.191, "detail": "sticker_03.png"}
+{"at": "2026-10-28T13:56:53+00:00", "post": "2026-10-28_1337_reel", "service": "anthropic", "model": "claude-opus-5-5", "usd": 0.0073}
+{"at": "2026-10-28T13:56:58+00:00", "post": "2026-10-28_1337_reel", "service": "higgsfield", "model": "marketing-studio/image", "usd": 0.192, "detail": "sticker_04.png"}
+{"at": "2026-10-28T13:56:59+00:00", "post": "2026-10-28_1337_reel", "service": "anthropic", "model": "claude-opus-5-5", "usd": 0.0118}
+{"at": "2026-10-28T13:57:01+00:00", "post": "2026-10-28_1337_reel", "service": "higgsfield", "model": "marketing-studio/image", "usd": 0.191, "detail": "sticker_01.png"}
+{"at": "2026-10-28T13:57:03+00:00", "post": "2026-10-28_1337_reel", "service": "anthropic", "model": "claude-opus-5-5", "usd": 0.0086}
+{"at": "2026-10-28T13:57:04+00:00", "post": "2026-10-28_1337_reel", "service": "anthropic", "model": "claude-opus-5-5", "usd": 0.0046}
+{"at": "2026-10-28T13:58:41+00:00", "post": "2026-10-28_1337_reel", "service": "higgsfield", "model": "marketing-studio/image", "usd": 0.191, "detail": "sticker_03_b.png"}
+{"at": "2026-10-28T13:58:48+00:00", "post": "2026-10-28_1337_reel", "service": "anthropic", "model": "claude-opus-5-5", "usd": 0.011}
+{"at": "2026-10-28T14:02:08+00:00", "post": "2026-10-28_1337_reel", "service": "anthropic", "model": "claude-opus-5-5", "usd": 0.0065}
+{"at": "2026-10-28T14:02:12+00:00", "post": "2026-10-28_1337_reel", "service": "anthropic", "model": "claude-opus-5-5", "usd": 0.0101}

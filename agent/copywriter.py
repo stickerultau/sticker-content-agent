@@ -29,10 +29,9 @@ CAROUSEL_SCHEMA = obj(
 
 REEL_SCHEMA = obj(
     hook=STR,
-    clips=arr(obj(name=STR, design=STR, material=STR, surface=STR, target=STR, narration=STR)),
-    cta=STR,
-    end_title=STR,
-    end_sub=STR,
+    surface=STR,
+    target=STR,
+    stickers=arr(obj(name=STR, design=STR, material=STR)),
     shop_cta=STR,
     caption=STR,
     hashtags=arr(STR),
@@ -47,9 +46,9 @@ def _material_rule(cfg: dict) -> str:
             f"material ({showcase}) where it suits the artwork, so followers discover the shop's range")
 
 
-def _shop_cta_rule(cfg: dict) -> str:
+def _shop_cta_rule(cfg: dict, where: str = "on the last slide") -> str:
     shop = cfg["page"]["shop_handle"]
-    return (f"- shop_cta: Romanian, max 60 characters, shown on the last slide: where these can be printed, naming a "
+    return (f"- shop_cta: Romanian, max 60 characters, shown {where}: where these can be printed, naming a "
             f"surface or material from the shop's range that fits this theme (for example \"Le vrei pe mașină? Le "
             f"printăm și holografic → @{shop}\"). It must end with @{shop}")
 
@@ -73,7 +72,7 @@ def write_carousel(claude: Claude, cfg: dict, topic: dict) -> dict:
     prompt = f"""Write today's carousel post.
 {_topic_block(topic)}
 
-Create exactly {n} sticker designs for this theme. For each one:
+Create exactly {n} sticker designs for this theme, ordered as an escalation: each one a little funnier, cuter or more relatable than the one before, the last one the punchline of the pack, so people swipe to the end. For each one:
 - name: catchy Romanian name, 2-4 words, max 24 characters
 - line: one witty Romanian line, max 70 characters: the joke or feeling that makes someone want it
 - design: {DESIGN_GUIDE}
@@ -82,7 +81,7 @@ Create exactly {n} sticker designs for this theme. For each one:
 
 Also write:
 - kicker: tiny uppercase Romanian label above the cover title, max 22 characters (for example "PACHETUL ZILEI" or the occasion)
-- title: Romanian cover headline, max 46 characters. Wrap the single most important word in *asterisks*.
+- title: Romanian cover headline, max 46 characters, that names the theme and makes people curious enough to swipe to the end, without giving away the best design. Wrap the single most important word in *asterisks*.
 - mockup_scene: English description of one real-life surface from the shop's range where these stickers are stuck together, chosen to fit the theme and varied from post to post (for example "the rear window of a small city car", "the glass door of a cozy café", "the lid of a closed silver laptop on a light oak desk", "a matte steel water bottle on a gym bench")
 - mockup_label: Romanian label for that photo, max 28 characters (for example "Așa arată pe mașină")
 - cta_title: Romanian, max 30 characters, invites people to pick a favorite
@@ -97,29 +96,34 @@ Also write:
 
 
 def write_reel(claude: Claude, cfg: dict, topic: dict) -> dict:
-    n = cfg["formats"]["reel"]["clips"]
-    prompt = f"""Write today's reel: about 18 seconds, a Romanian voiceover, {n} stickers each shown being peeled off its sheet and stuck onto an everyday object.
+    n = cfg["formats"]["reel"]["stickers"]
+    choices = ", ".join(m["name"] + (f" ({m['hint']})" if m.get("hint") else "")
+                        for m in cfg["page"]["shop_offer"]["materials"])
+    prompt = f"""Write today's reel: a 9-second vertical video with no voiceover, made to be watched to the end and replayed. It opens on the finished result for a split second, rewinds to an empty surface, then {n} stickers for today's theme land on it one by one with a satisfying slap while an on-screen counter goes from 1/{n} to {n}/{n}. After the last one lands, the video ends on the finished surface and loops.
 {_topic_block(topic)}
 
-Create exactly {n} clips. For each one:
-- name: catchy Romanian sticker name, 2-4 words, max 24 characters (shown on screen)
-- design: {DESIGN_GUIDE}
-- material: {_material_rule(cfg)}
-- surface: English, where the sticker sheet lies at the start (for example "a light oak desk")
-- target: English, the object it gets stuck on, from the shop's range and different for each clip (for example "the rear window of a car", "the glass door of a café", "a matte black laptop lid", "a pastel blue water bottle", "a motorcycle helmet")
-- narration: Romanian voiceover for this clip, 7-11 words, natural and fun to hear
+What keeps people watching: the hook opens a question that only the LAST sticker answers, the counter makes them want to complete the set, and the last sticker is the payoff. Everything below serves that.
+
+Create exactly {n} sticker designs, ordered as an escalation: each one a little funnier, cuter or more relatable for this audience than the one before. The LAST one is the punchline the hook promised: the idea people will comment about and send to a friend. For each one:
+- name: catchy Romanian name, 2-4 words, max 24 characters (used in the caption)
+- design: {DESIGN_GUIDE} It is seen small and fast, so give it one clear subject with a strong silhouette, readable at a glance.
+- material: a DIFFERENT material for every sticker, so the reel shows the shop's range (its name appears on screen as each sticker lands). Choose from: {choices}. With 4 or more stickers, include both vinil lucios and vinil mat. The LAST sticker uses a showcase material (holografic or epoxy 3D): it catches the light when it lands.
 
 Also write:
-- hook: the first line, shown on screen and spoken, Romanian, 4-8 words, max 42 characters. It must stop the scroll.
-- cta: the spoken closing line, Romanian, 7-12 words: ask for their favorite in the comments and mention they can order at stickerul.tau
-- end_title: Romanian, max 30 characters, for the end card
-- end_sub: Romanian, max 60 characters, for the end card
-{_shop_cta_rule(cfg)}
-{_caption_rules(cfg)}"""
+- surface: English, ONE real flat surface that this theme's people actually put stickers on, from the shop's range, in a setting that fits the theme, photographed straight on and close up so that it fills most of a vertical frame, clean and empty. Vary it from post to post. Examples: "the lid of a closed matte black laptop on a walnut desk, seen from above", "the rear window of a small white city car, close up from behind", "the glass door of a cozy café, seen from outside", "the door of a pastel green retro fridge in a sunny kitchen", "the cover of a kraft paper notebook on a desk".
+- target: English, 2-5 words naming exactly the area of that surface the stickers go on (for example "the rear window glass", "the laptop lid", "the glass door", "the fridge door", "the notebook cover").
+- hook: on-screen text for the first 2 seconds, Romanian, 3-6 words, max 34 characters, no emoji. It must make THIS theme's people stay until the last sticker: open a question only the ending answers, never describe the video and never give away the last sticker. Patterns that work (adapt them to the theme, don't copy them):
+  * tease the last one: "Ultimul e pentru tine", "Așteaptă-l pe ultimul"
+  * call out the audience, then tease: "Șoferi, ultimul e despre voi", "Dacă ai pisică, vezi ultimul"
+  * promise something about the ending: "Ultimul e mașina tatălui tău", "Ultimul m-a făcut să râd"
+  Wrong, because they describe the video or the product: "Stickere pe laptop", "4 stickere noi pentru tine".
+{_shop_cta_rule(cfg, "at the end of the video")}
+{_caption_rules(cfg)}
+- For this reel, caption line 1 asks which of the {n} is their favorite (1 to {n}); a later line asks them to send the reel to one specific kind of friend from this theme (for example "prietenului care zice mereu «lasă că merge și așa»")."""
     copy = claude.ask_json(system_prompt(cfg), prompt, REEL_SCHEMA)
-    if len(copy["clips"]) < n:
-        raise RuntimeError(f"Claude returned {len(copy['clips'])} clips instead of {n}")
-    copy["clips"] = copy["clips"][:n]
+    if len(copy["stickers"]) < n:
+        raise RuntimeError(f"Claude returned {len(copy['stickers'])} stickers instead of {n}")
+    copy["stickers"] = copy["stickers"][:n]
     return _finish(copy, cfg, "reel")
 
 
@@ -155,8 +159,16 @@ def _finish(copy: dict, cfg: dict, fmt: str) -> dict:
     copy["format"] = fmt
     materials = {m["name"].lower(): m["name"] for m in cfg["page"]["shop_offer"]["materials"]}
     default_material = next(iter(materials.values()))
-    for entry in copy.get("items", copy.get("clips", [])):
+    entries = copy.get("items") or copy.get("stickers") or []
+    for entry in entries:
         entry["material"] = materials.get(entry.get("material", "").strip().lower(), default_material)
+    if fmt == "reel" and entries:
+        # Every sticker in a reel shows a different material; the last (showcase) one keeps its own.
+        used = {entries[-1]["material"]}
+        for entry in entries[:-1]:
+            if entry["material"] in used:
+                entry["material"] = next((m for m in materials.values() if m not in used), entry["material"])
+            used.add(entry["material"])
     shop = "@" + cfg["page"]["shop_handle"]
     cta = copy.get("shop_cta", "").strip()
     if not cta:
@@ -166,6 +178,5 @@ def _finish(copy: dict, cfg: dict, fmt: str) -> dict:
     copy["shop_cta"] = cta
     copy["hashtags"] = clean_hashtags(copy["hashtags"], cfg["page"]["hashtags_core"])
     copy["full_caption"] = (copy["caption"].strip() + "\n\n" + " ".join(copy["hashtags"]))[:2200]
-    names = [i["name"] for i in copy.get("items", copy.get("clips", []))]
-    log.info("Designs: " + " | ".join(names))
+    log.info("Designs: " + " | ".join(e["name"] for e in entries))
     return copy

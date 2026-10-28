@@ -3,8 +3,7 @@ name: Content Creation Agent
 on:
   schedule:
     - cron: "0 17 * * *"       # carousel every day at 19:00 Romania time (20:00 in summer)
-    # Reels are paused (28 Oct 2026) until the new animated reel template is approved. To resume, remove the "#":
-    # - cron: "0 11 * * 2,4,6"   # reel on Tue/Thu/Sat at 13:00 Romania time (14:00 in summer)
+    - cron: "0 11 * * 2,4,6"   # reel on Tue/Thu/Sat at 13:00 Romania time (14:00 in summer); "#" in front pauses it
   workflow_dispatch:
     inputs:
       format:

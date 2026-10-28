@@ -7,12 +7,14 @@ from __future__ import annotations
 
 import datetime as dt
 import json
+import threading
 from collections import defaultdict
 
 from .settings import STATE
 
 LEDGER = STATE / "costs.jsonl"
 _context = {"post": None}
+_lock = threading.Lock()   # images and clips are generated in parallel threads
 
 
 def set_post(post_id: str | None) -> None:
@@ -26,7 +28,7 @@ def record(service: str, model: str, usd: float, detail: str = "") -> None:
              "service": service, "model": model, "usd": round(float(usd), 4)}
     if detail:
         entry["detail"] = detail
-    with open(LEDGER, "a", encoding="utf-8") as f:
+    with _lock, open(LEDGER, "a", encoding="utf-8") as f:
         f.write(json.dumps(entry, ensure_ascii=False) + "\n")
 
 

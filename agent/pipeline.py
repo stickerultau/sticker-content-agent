@@ -3,12 +3,13 @@ from __future__ import annotations
 
 import datetime as dt
 import json
+import shutil
 from pathlib import Path
 from zoneinfo import ZoneInfo
 
 from PIL import Image
 
-from . import copywriter, costs, design, log, research, state, video, visuals, voice
+from . import animate, copywriter, costs, design, log, research, state, video, visuals
 from .higgsfield import Higgsfield
 from .hosting import GitHubMediaHost
 from .instagram import Instagram
@@ -47,13 +48,24 @@ def _save(img: Image.Image, path: Path) -> str:
 
 # ---------------------------------------------------------------------------------------------- create
 
-def create(cfg: dict, fmt: str) -> Path:
-    now = now_local(cfg)
+def reel_visuals(cfg: dict):
+    """How the reel's stickers land: "placed" (cut out and animated by code) or "ai_clips" (one Kling clip each)."""
+    engine = cfg["formats"]["reel"].get("engine", "placed")
+    return visuals.reel_placed_media if engine == "placed" else visuals.reel_media
+
+
+def check_budget(cfg: dict) -> float | None:
     budget = (cfg.get("budget") or {}).get("monthly_usd")
     spent = costs.total()
     if budget and spent >= budget:
         raise RuntimeError(f"Monthly budget reached: ${spent:.2f} of ${budget:.2f} spent this month "
                            "(raise budget.monthly_usd in config/page.yaml to continue).")
+    return budget
+
+
+def create(cfg: dict, fmt: str) -> Path:
+    now = now_local(cfg)
+    budget = check_budget(cfg)
     costs.set_post(f"{now:%Y-%m-%d_%H%M}_{fmt}")
     claude = Claude(cfg["models"]["claude"], cfg["models"]["effort"])
 
@@ -74,10 +86,10 @@ def create(cfg: dict, fmt: str) -> Path:
         if fmt == "carousel":
             media = visuals.carousel_images(hf, cfg, copy, copy["palette"], post_dir / "images")
         else:
-            media = visuals.reel_media(hf, cfg, copy, post_dir / "media")
+            media = reel_visuals(cfg)(hf, claude, cfg, copy, post_dir / "media")
         write_json(post_dir / "media.json", media)
 
-    with log.step(4, "Design & edit" + (" + voiceover + captions" if fmt == "reel" else "")):
+    with log.step(4, "Design & edit"):
         post = render(cfg, post_dir)
 
     post["cost_usd"] = round(claude.cost + hf.spent, 3)
@@ -85,6 +97,32 @@ def create(cfg: dict, fmt: str) -> Path:
     log.info(f"Cost of this post: ${post['cost_usd']:.2f} (Claude ${claude.cost:.2f}, Higgsfield ${hf.spent:.2f}); "
              f"this month so far: ${costs.total():.2f}" + (f" of ${budget:.2f}" if budget else ""))
     log.info(f"Saved in {post_dir}")
+    return post_dir
+
+
+def remake(cfg: dict, post_dir: Path) -> Path:
+    """Makes the pictures (or clips) of an unpublished post again with the same theme and text, then re-renders it:
+    for a post that failed the quality check or that you didn't like."""
+    if (post_dir / "post.json").exists() and read_json(post_dir / "post.json").get("published"):
+        raise RuntimeError("This post is already published.")
+    check_budget(cfg)
+    copy = read_json(post_dir / "copy.json")
+    costs.set_post("_".join(post_dir.name.split("_")[:3]))   # same id as when it was created: date_time_format
+    claude, hf = Claude(cfg["models"]["claude"], cfg["models"]["effort"]), Higgsfield()
+    folder = post_dir / ("images" if copy["format"] == "carousel" else "media")
+    shutil.rmtree(folder, ignore_errors=True)
+    with log.step(3, "Create visuals again (Higgsfield)"):
+        if copy["format"] == "carousel":
+            media = visuals.carousel_images(hf, cfg, copy, copy["palette"], folder)
+        else:
+            media = reel_visuals(cfg)(hf, claude, cfg, copy, folder)
+        write_json(post_dir / "media.json", media)
+    with log.step(4, "Design & edit"):
+        post = render(cfg, post_dir)
+    spent = claude.cost + hf.spent
+    post["cost_usd"] = round((post.get("cost_usd") or 0) + spent, 3)
+    write_json(post_dir / "post.json", post)
+    log.info(f"Cost of this remake: ${spent:.2f}; this post in total: ${post['cost_usd']:.2f}")
     return post_dir
 
 
@@ -128,41 +166,50 @@ def render_carousel(cfg: dict, post_dir: Path, copy: dict) -> dict:
 
 def render_reel(cfg: dict, post_dir: Path, copy: dict) -> dict:
     brand, page, palette = cfg["brand"], cfg["page"], copy["palette"]
-    reel_cfg = cfg["formats"]["reel"]
-    media_dir, overlays = post_dir / "media", post_dir / "overlays"
+    media = read_json(post_dir / "media.json")
+    overlays = post_dir / "overlays"
     overlays.mkdir(exist_ok=True)
-    clips = copy["clips"]
-    frames = [Image.open(_find(media_dir, f"frame_{k:02d}")).convert("RGB") for k in range(1, len(clips) + 1)]
+    stickers = copy["stickers"]
+    n = len(stickers)
 
     design.reel_hook(copy["hook"], palette, brand).save(overlays / "hook.png")
-    for k, clip in enumerate(clips, start=1):
-        design.reel_label(clip["name"], k, palette, brand).save(overlays / f"label_{k}.png")
-    end_card = design.reel_end_card(copy, frames, palette, brand, page)
-    end_card.save(overlays / "end_card.png")
+    counters = []
+    for k, sticker in enumerate(stickers, start=1):
+        design.reel_counter(k, n, sticker["material"], palette, brand).save(overlays / f"counter_{k}.png")
+        counters.append(overlays / f"counter_{k}.png")
+    design.reel_shop(copy.get("shop_cta") or page["cta_line"], palette).save(overlays / "shop.png")
 
-    lines = [copy["hook"], *[c["narration"] for c in clips], copy["cta"]]
-    cache = post_dir / "voice" / "segments.json"
-    if cache.exists() and [s["text"] for s in read_json(cache)] == lines:
-        segments = read_json(cache)
+    layers = {"hook": overlays / "hook.png", "counters": counters, "shop": overlays / "shop.png"}
+    if media.get("engine") == "placed":
+        cutouts = [animate.load_cutout(post_dir / "media" / s["file"], clear=item["material"] in animate.CLEAR)
+                   for s, item in zip(media["stickers"], stickers)]
+        timeline = animate.render_reel(post_dir, post_dir / "media" / media["scenes"][0]["file"], cutouts,
+                                       tuple(media["box"]), [s["material"] for s in stickers], layers)
     else:
-        segments = voice.synthesize(lines, reel_cfg["voice"], reel_cfg["voice_rate"], post_dir / "voice")
-        write_json(cache, segments)
-
-    clip_files = [media_dir / f"clip_{k:02d}.mp4" for k in range(1, len(clips) + 1)]
-    video.render_reel(post_dir, clip_files, segments, ink=brand["ink"], volume=reel_cfg["music_volume"])
-    _save(design.reel_cover(copy["hook"], frames[0], palette, brand, page), post_dir / "cover.jpg")
-    design.contact_sheet([post_dir / "cover.jpg", *[_find(media_dir, f"frame_{k:02d}") for k in range(1, len(clips) + 1)],
-                          overlays / "end_card.png"], post_dir / "preview.jpg")
-    return {"format": "reel", "media": ["reel.mp4"], "cover": "cover.jpg"}
+        clips = [post_dir / "media" / c["file"] for c in media["clips"]]
+        timeline = video.render_reel(post_dir, clips, layers)
+    finished = Image.open(overlays / f"state_{n}.jpg")
+    _save(design.reel_cover(copy["hook"], finished, palette, brand, page), post_dir / "cover.jpg")
+    design.contact_sheet([post_dir / "cover.jpg", *[overlays / f"state_{k}.jpg" for k in range(n + 1)]],
+                         post_dir / "preview.jpg")
+    if not media.get("qa_ok", True):
+        log.warn("Some edits or clips failed the quality check (details in media.json); this reel won't be "
+                 "published automatically.")
+    return {"format": "reel", "media": ["reel.mp4"], "cover": "cover.jpg", "length_s": round(timeline["total"], 2),
+            "qa_ok": media.get("qa_ok", True)}
 
 
 # ---------------------------------------------------------------------------------------------- publish
 
-def publish(cfg: dict, post_dir: Path) -> dict:
+def publish(cfg: dict, post_dir: Path, force: bool = False) -> dict:
     post = read_json(post_dir / "post.json")
     if post.get("published"):
         log.warn(f"Already published: {post['published'].get('permalink')}")
         return post["published"]
+    if post.get("qa_ok") is False and not force:
+        raise RuntimeError("This reel failed the automatic quality check (see media.json), so it was not published. "
+                           f"Watch {post_dir / 'reel.mp4'}; to publish it anyway: python run.py publish "
+                           f"\"{post_dir}\" --force")
 
     ig = Instagram()
     ig.refresh_if_needed()
@@ -188,7 +235,7 @@ def publish(cfg: dict, post_dir: Path) -> dict:
     write_json(post_dir / "post.json", post)
     copy = read_json(post_dir / "copy.json")
     state.add({"date": result["published_at"][:10], "format": post["format"], "theme": post["theme"],
-               "names": [i["name"] for i in copy.get("items", copy.get("clips", []))],
+               "names": [i["name"] for i in copy.get("items") or copy.get("stickers") or []],
                "permalink": result.get("permalink"), "media_id": result.get("media_id")})
     log.info(f"Published: {result.get('permalink')}")
     preview = url_list[0] if post["format"] == "carousel" else url_list[-1]

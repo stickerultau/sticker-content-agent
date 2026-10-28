@@ -86,11 +86,14 @@ formats:
     items: 5                       # sticker designs per carousel
     mockup_slide: true             # extra slide with all stickers on a laptop (skipped if no model supports it)
   reel:
-    clips: 3                       # stickers per reel
-    motion: "peel"                 # "peel" = a hand peels and sticks it; "float" = no hands, the sticker lifts and turns
-    voice: "ro-RO-AlinaNeural"     # free Microsoft neural voice; alternative: ro-RO-EmilNeural
-    voice_rate: "+6%"
-    music_volume: 0.12             # used when assets/music contains royalty-free .mp3 tracks
+    # "Sticker bomb", about 9 s, no voiceover: it opens on the finished surface, rewinds to empty, then the stickers
+    # land one by one (faster and faster, the best one last) and it ends where it began, so it loops.
+    engine: "ai_clips"             # "ai_clips" (chosen 28 Oct 2026): each landing filmed by Kling O3 with its own
+                                   #   sound; stickers never overlap; about $2.20-3.30 a reel with retries
+                                   # "placed": each sticker made alone, cut out, placed and animated by code
+                                   #   (always-correct layering, about $1.15 a reel, a more "designed" look)
+    stickers: 4                    # stickers per reel; every one in a different material
+    clip_seconds: 3                # "ai_clips" only: each sticker's clip before speed-up (Kling O3's shortest)
 
 models:
   claude: "claude-opus-5-5"
@@ -105,10 +108,17 @@ models:
     - {id: "xai/grok-imagine-image-2.0", args: {}, price: 0.06}
   mockup_image:                    # receives the sticker images as references
     - {id: "alibaba/qwen-image-3/edit", args: {}, refs: "image_urls", max_refs: 3, price: 0.04}
-  video:
-    - {id: "kling-video/v2.5-turbo/pro/image-to-video", args: {duration: 5, cfg_scale: 0.5}, price_per_sec: 0.06}
-    - {id: "kling-video/v2.6/pro/image-to-video", args: {duration: 5}, price_per_sec: 0.07}
-    - {id: "minimax/hailuo-2.3/standard/image-to-video", args: {duration: 6}, price_per_sec: 0.05}
+  reel_scene:                      # the empty surface the reel's stickers land on (9:16)
+    - {id: "marketing-studio/image", args: {}, price: 0.21}
+    - {id: "ideogram/v4.0", args: {}, price: 0.06}
+  reel_edit:                       # adds one sticker at a time to the scene; 2k keeps the small stickers sharp
+    # (at 2k the model returns a square picture unless aspect_ratio is given)
+    - {id: "alibaba/qwen-image-3/edit", args: {resolution: "2k", aspect_ratio: "9:16"}, refs: "image_urls", max_refs: 3, price: 0.075}
+  reel_sticker:                    # "placed": each reel sticker alone on a green screen (cut out by code)
+    - {id: "marketing-studio/image", args: {resolution: "1k"}, price: 0.188}
+    - {id: "ideogram/v4.0", args: {}, price: 0.06}
+  reel_video:                      # one clip per sticker, from the scene before it landed to the scene after
+    - {id: "kling-video/o3/first-last-frame", args: {sound: "on"}, price_per_sec: 0.119}
 
 budget:
   monthly_usd: 60                  # the agent stops creating posts once this month's recorded spend reaches it

@@ -13,7 +13,6 @@ from dotenv import load_dotenv
 ROOT = Path(__file__).resolve().parent.parent
 ASSETS = ROOT / "assets"
 FONTS = ASSETS / "fonts"
-MUSIC = ASSETS / "music"
 STATE = ROOT / "state"
 OUTPUT = ROOT / "output"
 CONFIG_FILE = ROOT / "config" / "page.yaml"

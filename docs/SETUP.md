@@ -11,7 +11,7 @@ What exists today is listed at the end ([Inventory](#inventory-what-exists-today
 | Instagram (the page) | where posts are published | free |
 | Facebook (your personal account) | only to log in to Meta for Developers and own the developer app; nothing is posted there | free |
 | Anthropic Console | Claude writes themes, sticker concepts and captions | ≈ $0.12 per post |
-| Higgsfield API (open.higgsfield.ai) | sticker images and reel videos | ≈ $1.43 per carousel, $1.50–1.90 per reel |
+| Higgsfield API (open.higgsfield.ai) | sticker images and reel videos | ≈ $1.43 per carousel, ≈ $1.95–3.00 per reel |
 | GitHub | runs the schedule and serves the media to Instagram | free |
 
 On the computer (Windows): Python 3.12, FFmpeg, Git and GitHub CLI. `scripts\setup-local.ps1` tells you what is
@@ -79,8 +79,8 @@ the page uses about $5–8 of Claude a month.
 ## 4. Higgsfield API key
 
 <https://open.higgsfield.ai> → **Create API key**. You get a **key ID** and a **secret**, shown once →
-`HF_API_KEY_ID` and `HF_API_KEY_SECRET`. Top up $50 or more: the daily carousel alone uses about $43 a month
-(5 images × $0.277 + the mockup). The API is pay-as-you-go and separate from Higgsfield app plans (app credits do
+`HF_API_KEY_ID` and `HF_API_KEY_SECRET`. Top up $80 or more: daily carousels use about $43 a month (5 images ×
+$0.277 + the mockup) and 3 reels a week about $25–40. The API is pay-as-you-go and separate from Higgsfield app plans (app credits do
 not work for the API, and API generations don't appear in the app's library). Model choices are explained in
 [OPERATIONS.md → Models](OPERATIONS.md#models).
 
@@ -152,5 +152,5 @@ password-based posting tools (high ban risk for new accounts).
 | Permissions | `instagram_business_basic`, `instagram_business_content_publish`; the page is an accepted Instagram Tester |
 | GitHub repository | [stickerultau/sticker-content-agent](https://github.com/stickerultau/sticker-content-agent) (public); branches `main` (code and state) and `media` (current post's files) |
 | Secrets | GitHub Actions: `ANTHROPIC_API_KEY`, `HF_API_KEY_ID`, `HF_API_KEY_SECRET`, `TOKEN_KEY`; Instagram token encrypted in `state/ig_token.enc` |
-| Schedule | `.github/workflows/autopost.yml`: carousel daily 17:00 UTC; reel Tue/Thu/Sat 11:00 UTC (paused since 28 Oct 2026) |
+| Schedule | `.github/workflows/autopost.yml`: carousel daily 17:00 UTC; reel Tue/Thu/Sat 11:00 UTC |
 | First post | <https://www.instagram.com/p/DfBBcQrDP-F/> (28 Oct 2026) |

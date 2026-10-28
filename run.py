@@ -3,8 +3,11 @@
   python run.py check                          verify keys, Instagram account, media hosting, FFmpeg
   python run.py post --format carousel         create AND publish a post (what the schedule runs)
   python run.py create --format reel           create a post without publishing (review it in output/)
-  python run.py publish output/<post folder>   publish a post you created earlier
+  python run.py publish output/<post folder>   publish a post you created earlier (--force: even if a reel
+                                               failed the automatic quality check)
   python run.py render output/<post folder>    re-render slides/reel after editing its copy.json
+  python run.py remake output/<post folder>    make the pictures/clips of an unpublished post again (same text)
+  python run.py costs                          spend this month by model and by post, against the budget
   python run.py refresh-token                  refresh the Instagram token now
   python run.py seal-token                     encrypt the token for GitHub Actions (state/ig_token.enc)
 """
@@ -106,8 +109,11 @@ def main() -> int:
     for name in ("post", "create"):
         p = sub.add_parser(name)
         p.add_argument("--format", choices=["carousel", "reel"], default="carousel")
-    for name in ("publish", "render"):
-        sub.add_parser(name).add_argument("post_dir", type=Path)
+    publisher = sub.add_parser("publish")
+    publisher.add_argument("post_dir", type=Path)
+    publisher.add_argument("--force", action="store_true", help="publish a reel even if it failed the quality check")
+    sub.add_parser("render").add_argument("post_dir", type=Path)
+    sub.add_parser("remake").add_argument("post_dir", type=Path)
     sub.add_parser("refresh-token")
     sub.add_parser("seal-token")
     sub.add_parser("costs")
@@ -140,13 +146,17 @@ def main() -> int:
         else:
             log.info("Not published (create mode). To publish: python run.py publish " + str(post_dir))
         return 0
+    if args.command == "remake":
+        pipeline.remake(cfg, args.post_dir.resolve())
+        log.info("Not published. To publish: python run.py publish " + str(args.post_dir))
+        return 0
     if args.command == "render":
         pipeline.render(cfg, args.post_dir.resolve())
         log.info(f"Rendered {args.post_dir}")
         return 0
     if args.command == "publish":
         with log.step(5, "Publish to Instagram"):
-            pipeline.publish(cfg, args.post_dir.resolve())
+            pipeline.publish(cfg, args.post_dir.resolve(), force=args.force)
         return 0
     return 1
 

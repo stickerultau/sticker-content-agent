@@ -15,7 +15,6 @@ from .settings import FONTS
 W, H = 1080, 1350        # carousel slide (4:5)
 RW, RH = 1080, 1920      # reel frame (9:16)
 M = 72                   # outer margin
-CAPTION_YELLOW = "#FFD84D"
 
 _CEDILLA = str.maketrans("şţŞŢ", "șțȘȚ")
 
@@ -396,38 +395,25 @@ def multiline_label(lines: list[str], fnt, fill: str, color: str, accent: str, p
     return tile
 
 
-def reel_label(name: str, index: int, palette: dict, brand: dict) -> Image.Image:
-    """Transparent overlay with the sticker's number and name (top-left, inside the Reels safe area)."""
+def reel_counter(index: int, total: int, material: str, palette: dict, brand: dict) -> Image.Image:
+    """Transparent overlay, top left inside the Reels safe area: "2/4" and the sticker's material."""
     layer = Image.new("RGBA", (RW, RH), (0, 0, 0, 0))
-    fnt = font("BrandBodyBold", 42)
-    box = pill(layer, (M, 256), fix_ro(name), fnt, (255, 255, 255, 242), rgb(brand["ink"]), height=80,
-               pad_x=34, pad_left=104)
-    badge = Image.new("RGBA", (96, 96), (0, 0, 0, 0))
-    d = ImageDraw.Draw(badge)
-    d.ellipse((0, 0, 95, 95), fill=(255, 255, 255, 255))
-    d.ellipse((7, 7, 88, 88), fill=rgb(palette["accent"], 255))
-    d.text((48, 51), str(index), font=font("BrandDisplay", 48), fill=(255, 255, 255), anchor="mm")
-    place(layer, badge, (box[0] + 40, (box[1] + box[3]) // 2), shadow=50, blur=10, drop=4)
+    chip = Image.new("RGBA", (RW, 136), (0, 0, 0, 0))
+    box = pill(chip, (0, 8), f"{index}/{total}", font("BrandDisplay", 58), rgb(palette["accent"], 255),
+               (255, 255, 255), height=104, pad_x=36)
+    label = fix_ro(material)
+    end = pill(chip, (box[2] + 14, 18), label[:1].upper() + label[1:], font("BrandBodyBold", 44),
+               (255, 255, 255, 245), rgb(brand["ink"]), height=84, pad_x=32)
+    chip = chip.crop((0, 0, end[2] + 2, 120))
+    place(layer, chip, (M + chip.width // 2, 236 + chip.height // 2), shadow=60, blur=14, drop=6)
     return layer
 
 
-def reel_end_card(copy: dict, frames: list[Image.Image], palette: dict, brand: dict, page: dict) -> Image.Image:
-    ink, accent = brand["ink"], palette["accent"]
-    canvas = background((RW, RH), palette["bg"], glow=90).convert("RGBA")
-    draw = ImageDraw.Draw(canvas)
-    title_font, title_lines = fit(copy["end_title"], "BrandDisplay", RW - 2 * M, 2, range(100, 63, -4))
-    y = 330 + title_font.getmetrics()[0]
-    for line in title_lines:
-        draw.text((RW // 2, y), line, font=title_font, fill=rgb(ink), anchor="ms")
-        y += int(title_font.size * 1.05)
-    sub_font, sub_lines = fit(copy["end_sub"], "BrandBody", RW - 2 * M, 2, range(40, 31, -1))
-    for line in sub_lines:
-        draw.text((RW // 2, y + 6), line, font=sub_font, fill=rgb(ink, 200), anchor="ms")
-        y += int(sub_font.size * 1.3)
-    numbered_grid(canvas, frames, y + 60, 290 if len(frames) <= 3 else 250, 28, ink, accent, RW)
-    shop_pill(canvas, copy.get("shop_cta") or page["cta_line"], 1470, accent, width=RW, height=92)
-    draw.text((RW // 2, 1640), "@" + page["handle"], font=font("BrandBodyBold", 32), fill=rgb(ink, 190), anchor="ms")
-    return canvas.convert("RGB")
+def reel_shop(text: str, palette: dict) -> Image.Image:
+    """Transparent overlay with the shop line, low in the frame but above Instagram's caption area."""
+    layer = Image.new("RGBA", (RW, RH), (0, 0, 0, 0))
+    shop_pill(layer, text, 1440, palette["accent"], width=RW, height=88)
+    return layer
 
 
 def reel_cover(hook: str, frame: Image.Image, palette: dict, brand: dict, page: dict) -> Image.Image:
