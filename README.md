@@ -16,7 +16,7 @@ Claude + trends   Claude   Higgsfield  brand templates   Instagram API
 
 It runs on **GitHub Actions**, so no computer needs to be on. Each run picks a fresh theme from upcoming occasions,
 today's Google Trends in Romania and the post history, so themes don't repeat. Cost at Higgsfield's real rates:
-about **$1.55 per carousel** (≈ $47/month for the daily carousel) and about $2.20–3.30 per reel. Every paid call is
+about **$1.15 per carousel** (≈ $35/month for the daily carousel) and about $2.20–3.30 per weekly reel. Every paid call is
 logged with its real price in `state/costs.jsonl` (`run.py costs` shows the month), and `budget.monthly_usd` in
 `config/page.yaml` ($60) stops new posts once a month's spend reaches it. Instagram's API and GitHub Actions are free.
 

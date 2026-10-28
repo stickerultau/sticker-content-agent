@@ -112,7 +112,7 @@ Current choices (verified 28 Oct 2026 with a side-by-side test of the same stick
 
 | Role | Model (tried in order) | Price |
 |---|---|---|
-| Sticker images | `marketing-studio/image` (best looking), `ideogram/v4.0`, `xai/grok-imagine-image-2.0` | $0.277 (3:4) / $0.06 / $0.06 |
+| Sticker images (asked in 2:3, cropped into the 4:5 slide) | `marketing-studio/image` (best looking), `ideogram/v4.0`, `xai/grok-imagine-image-2.0` | $0.197 / $0.06 / $0.06 |
 | Laptop mockup | `alibaba/qwen-image-3/edit` (accepts at most 3 reference images) | $0.04 |
 | Reel surface | `marketing-studio/image` at 9:16, `ideogram/v4.0` | $0.21 / $0.06 |
 | Reel stickers, `placed` engine (one green-screen picture each) | `marketing-studio/image` at 1:1, `resolution: 1k`; `ideogram/v4.0` | $0.188 / $0.06 |
@@ -121,7 +121,8 @@ Current choices (verified 28 Oct 2026 with a side-by-side test of the same stick
 
 Prices are what Higgsfield's estimate endpoint (`POST https://api.higgsfield.ai/estimate/<model>`, free) returned
 on 28 Oct 2026. The agent asks it for every generation and logs the answer. Marketing Studio's price depends on the
-image shape: 3:4 (the carousel, 1744×2336 px) $0.277, 9:16 $0.21, 2:3 $0.197; `resolution: "1k"` costs about half.
+image shape: 2:3 (the carousel since 28 Oct 2026, 1360×2048 px) $0.197, 3:4 $0.277, 9:16 $0.21; `resolution: "1k"`
+costs about half.
 
 ## The `media` branch
 
@@ -141,9 +142,9 @@ endpoint, Claude calls from their token counts. See the month, by model and by p
 
 Each run's log and GitHub summary show the post's cost and the month so far. `budget.monthly_usd` in
 `config/page.yaml` (default $60) stops new posts once the month's logged spend reaches it; raise it to continue.
-Typical costs: carousel ≈ $1.55 (5 images × $0.277, mockup $0.04, Claude ≈ $0.12); reel ≈ $2.20 with `ai_clips`
+Typical costs: carousel ≈ $1.15 (5 images × $0.197, mockup $0.04, Claude ≈ $0.12); reel ≈ $2.20 with `ai_clips`
 (surface $0.21, 4 edits × $0.075, 4 clips × $0.357, checks and Claude ≈ $0.26), plus $0.08–0.38 for each edit or clip
-made again, so ≈ $2.20–3.30; ≈ $1.15 with `placed`. A month of daily carousels and a weekly reel ≈ $56–61.
+made again, so ≈ $2.20–3.30; ≈ $1.15 with `placed`. A month of daily carousels and a weekly reel ≈ $44–49.
 
 Post shape: slides are 1080×1350 (4:5), the tallest shape Instagram's API accepts for feed images (its documented
 range is 4:5 to 1.91:1; the app's newer 3:4 uploads aren't in that range). The shape asked from the image model

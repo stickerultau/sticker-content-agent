@@ -101,9 +101,9 @@ models:
   # Higgsfield API models, tried in order until one succeeds. IDs verified against GET https://api.higgsfield.ai/models.
   # Real prices are read from Higgsfield's estimate endpoint at run time and written to state/costs.jsonl;
   # the price values below are only a fallback (account rates, 28 Oct 2026). Marketing Studio's price depends on the
-  # shape: $0.277 at 3:4 (carousel, 1744x2336 px), $0.21 at 9:16; `resolution: "1k"` costs about half.
+  # shape: $0.197 at 2:3 (carousel, 1360x2048 px), $0.277 at 3:4, $0.21 at 9:16; `resolution: "1k"` costs about half.
   sticker_image:
-    - {id: "marketing-studio/image", args: {}, price: 0.277}
+    - {id: "marketing-studio/image", args: {}, price: 0.197}
     - {id: "ideogram/v4.0", args: {}, price: 0.06}
     - {id: "xai/grok-imagine-image-2.0", args: {}, price: 0.06}
   mockup_image:                    # receives the sticker images as references

@@ -48,8 +48,9 @@ def carousel_images(hf: Higgsfield, cfg: dict, copy: dict, palette: dict, folder
         index, item = index_item
         prompt = PRODUCT_SHOT.format(material=material_prompt(cfg, item.get("material")), design=item["design"],
                                      bg_label=palette["label"], bg_hex=palette["bg"])
+        # 2:3 costs $0.197 vs $0.277 for 3:4 and is still larger than the 1080x1350 slide it is cropped into.
         result = hf.generate(models["sticker_image"], prompt, folder / f"item_{index:02d}.jpg",
-                             extra={"aspect_ratio": "3:4"})
+                             extra={"aspect_ratio": "2:3"})
         log.info(f"  #{index} {item['name']}  ({result['model']})")
         return result
 

@@ -11,7 +11,7 @@ What exists today is listed at the end ([Inventory](#inventory-what-exists-today
 | Instagram (the page) | where posts are published | free |
 | Facebook (your personal account) | only to log in to Meta for Developers and own the developer app; nothing is posted there | free |
 | Anthropic Console | Claude writes themes, sticker concepts and captions | ≈ $0.12 per post |
-| Higgsfield API (open.higgsfield.ai) | sticker images and reel videos | ≈ $1.43 per carousel, ≈ $1.95–3.00 per reel |
+| Higgsfield API (open.higgsfield.ai) | sticker images and reel videos | ≈ $1.03 per carousel, ≈ $1.95–3.00 per reel |
 | GitHub | runs the schedule and serves the media to Instagram | free |
 
 On the computer (Windows): Python 3.12, FFmpeg, Git and GitHub CLI. `scripts\setup-local.ps1` tells you what is
@@ -79,8 +79,8 @@ the page uses about $5–8 of Claude a month.
 ## 4. Higgsfield API key
 
 <https://open.higgsfield.ai> → **Create API key**. You get a **key ID** and a **secret**, shown once →
-`HF_API_KEY_ID` and `HF_API_KEY_SECRET`. Top up $60 or more: daily carousels use about $43 a month (5 images ×
-$0.277 + the mockup) and the weekly reel about $8–13. The API is pay-as-you-go and separate from Higgsfield app plans (app credits do
+`HF_API_KEY_ID` and `HF_API_KEY_SECRET`. Top up $50 or more: daily carousels use about $31 a month (5 images ×
+$0.197 + the mockup) and the weekly reel about $8–13. The API is pay-as-you-go and separate from Higgsfield app plans (app credits do
 not work for the API, and API generations don't appear in the app's library). Model choices are explained in
 [OPERATIONS.md → Models](OPERATIONS.md#models).
 
@@ -102,7 +102,7 @@ Fill in `.env` (copied from `.env.example`): `ANTHROPIC_API_KEY`, `HF_API_KEY_ID
 ```powershell
 .\.venv\Scripts\python.exe run.py check                        # every line [ok]; Media hosting is set in step 6
 .\.venv\Scripts\python.exe tests\smoke_test.py                 # offline test, no cost
-.\.venv\Scripts\python.exe run.py create --format carousel     # a real post in output\, not published (~$1.55)
+.\.venv\Scripts\python.exe run.py create --format carousel     # a real post in output\, not published (~$1.15)
 ```
 
 ## 6. Deploy to GitHub (autopilot)
