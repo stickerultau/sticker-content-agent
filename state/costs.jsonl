@@ -79,3 +79,26 @@
 {"at": "2026-10-28T17:09:06+00:00", "post": "2026-10-28_1906_carousel", "service": "higgsfield", "model": "marketing-studio/image", "usd": 0.2, "detail": "item_04.jpg"}
 {"at": "2026-10-28T17:09:07+00:00", "post": "2026-10-28_1906_carousel", "service": "higgsfield", "model": "marketing-studio/image", "usd": 0.201, "detail": "item_05.jpg"}
 {"at": "2026-10-28T17:09:56+00:00", "post": "2026-10-28_1906_carousel", "service": "higgsfield", "model": "alibaba/qwen-image-3/edit", "usd": 0.04, "detail": "mockup.jpg"}
+{"at": "2026-10-28T17:37:57+00:00", "post": "2026-10-28_1937_reel", "service": "anthropic", "model": "claude-opus-5-5", "usd": 0.053}
+{"at": "2026-10-28T17:38:23+00:00", "post": "2026-10-28_1937_reel", "service": "anthropic", "model": "claude-opus-5-5", "usd": 0.0642}
+{"at": "2026-10-28T17:39:32+00:00", "post": "2026-10-28_1937_reel", "service": "higgsfield", "model": "marketing-studio/image", "usd": 0.213, "detail": "scene_00.jpg"}
+{"at": "2026-10-28T17:40:21+00:00", "post": "2026-10-28_1937_reel", "service": "higgsfield", "model": "alibaba/qwen-image-3/edit", "usd": 0.075, "detail": "scene_01.jpg"}
+{"at": "2026-10-28T17:40:26+00:00", "post": "2026-10-28_1937_reel", "service": "anthropic", "model": "claude-opus-5-5", "usd": 0.0142}
+{"at": "2026-10-28T17:41:28+00:00", "post": "2026-10-28_1937_reel", "service": "higgsfield", "model": "alibaba/qwen-image-3/edit", "usd": 0.075, "detail": "scene_02.jpg"}
+{"at": "2026-10-28T17:41:31+00:00", "post": "2026-10-28_1937_reel", "service": "anthropic", "model": "claude-opus-5-5", "usd": 0.0126}
+{"at": "2026-10-28T17:42:27+00:00", "post": "2026-10-28_1937_reel", "service": "higgsfield", "model": "alibaba/qwen-image-3/edit", "usd": 0.075, "detail": "scene_03.jpg"}
+{"at": "2026-10-28T17:42:34+00:00", "post": "2026-10-28_1937_reel", "service": "anthropic", "model": "claude-opus-5-5", "usd": 0.0206}
+{"at": "2026-10-28T17:43:24+00:00", "post": "2026-10-28_1937_reel", "service": "higgsfield", "model": "alibaba/qwen-image-3/edit", "usd": 0.075, "detail": "scene_03_b.jpg"}
+{"at": "2026-10-28T17:43:29+00:00", "post": "2026-10-28_1937_reel", "service": "anthropic", "model": "claude-opus-5-5", "usd": 0.0149}
+{"at": "2026-10-28T17:44:44+00:00", "post": "2026-10-28_1937_reel", "service": "higgsfield", "model": "alibaba/qwen-image-3/edit", "usd": 0.075, "detail": "scene_04.jpg"}
+{"at": "2026-10-28T17:44:49+00:00", "post": "2026-10-28_1937_reel", "service": "anthropic", "model": "claude-opus-5-5", "usd": 0.0159}
+{"at": "2026-10-28T17:46:01+00:00", "post": "2026-10-28_1937_reel", "service": "higgsfield", "model": "kling-video/o3/first-last-frame", "usd": 0.357, "detail": "clip_01.mp4"}
+{"at": "2026-10-28T17:46:07+00:00", "post": "2026-10-28_1937_reel", "service": "anthropic", "model": "claude-opus-5-5", "usd": 0.0185}
+{"at": "2026-10-28T17:46:12+00:00", "post": "2026-10-28_1937_reel", "service": "higgsfield", "model": "kling-video/o3/first-last-frame", "usd": 0.357, "detail": "clip_02.mp4"}
+{"at": "2026-10-28T17:46:19+00:00", "post": "2026-10-28_1937_reel", "service": "anthropic", "model": "claude-opus-5-5", "usd": 0.0217}
+{"at": "2026-10-28T17:46:32+00:00", "post": "2026-10-28_1937_reel", "service": "higgsfield", "model": "kling-video/o3/first-last-frame", "usd": 0.357, "detail": "clip_04.mp4"}
+{"at": "2026-10-28T17:46:32+00:00", "post": "2026-10-28_1937_reel", "service": "higgsfield", "model": "kling-video/o3/first-last-frame", "usd": 0.357, "detail": "clip_03.mp4"}
+{"at": "2026-10-28T17:46:39+00:00", "post": "2026-10-28_1937_reel", "service": "anthropic", "model": "claude-opus-5-5", "usd": 0.0193}
+{"at": "2026-10-28T17:46:40+00:00", "post": "2026-10-28_1937_reel", "service": "anthropic", "model": "claude-opus-5-5", "usd": 0.0229}
+{"at": "2026-10-28T17:48:34+00:00", "post": "2026-10-28_1937_reel", "service": "higgsfield", "model": "kling-video/o3/first-last-frame", "usd": 0.357, "detail": "clip_04_b.mp4"}
+{"at": "2026-10-28T17:48:47+00:00", "post": "2026-10-28_1937_reel", "service": "anthropic", "model": "claude-opus-5-5", "usd": 0.0322}
