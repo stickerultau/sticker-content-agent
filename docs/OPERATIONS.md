@@ -131,6 +131,9 @@ posting, the agent replaces the `media` branch with a single commit holding only
 Instagram their jsDelivr links. The branch never shares history with `main`, never grows, and must never be merged.
 GitHub may suggest "Compare & pull request" for it: ignore that. Deleting it is harmless; the next post recreates it.
 
+jsDelivr's terms forbid using it as a media host, so it could stop serving these links. A free replacement on
+Cloudflare R2 is ready but not active: see [CLOUDFLARE_R2.md](CLOUDFLARE_R2.md).
+
 ## Costs and balances
 
 Every paid call is logged in `state/costs.jsonl`: Higgsfield generations with the real price from the estimate

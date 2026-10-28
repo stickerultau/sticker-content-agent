@@ -26,6 +26,8 @@ logged with its real price in `state/costs.jsonl` (`run.py costs` shows the mont
   Higgsfield keys, install, deploy) and the inventory of what exists today.
 - **[docs/OPERATIONS.md](docs/OPERATIONS.md)**: where the secrets live and how to update them, changing content or
   schedule, reviewing posts, costs, troubleshooting, moving to a new computer.
+- **[docs/CLOUDFLARE_R2.md](docs/CLOUDFLARE_R2.md)**: the planned (not yet active) move of media hosting from
+  jsDelivr to Cloudflare R2: why, Cloudflare setup and switch-over steps.
 
 ## Everyday commands (PowerShell, in the project folder)
 
