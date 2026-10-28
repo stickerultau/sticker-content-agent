@@ -110,6 +110,7 @@ def main() -> int:
         sub.add_parser(name).add_argument("post_dir", type=Path)
     sub.add_parser("refresh-token")
     sub.add_parser("seal-token")
+    sub.add_parser("costs")
     setter = sub.add_parser("set-env")
     setter.add_argument("name")
     setter.add_argument("value")
@@ -118,6 +119,10 @@ def main() -> int:
 
     if args.command == "set-env":
         set_env_var(args.name, args.value)
+        return 0
+    if args.command == "costs":
+        from agent import costs
+        print(costs.report((cfg.get("budget") or {}).get("monthly_usd")))
         return 0
     if args.command == "check":
         return cmd_check(cfg)

@@ -1,0 +1,5 @@
+{"at": "2026-10-28T10:59:44+00:00", "post": null, "service": "higgsfield", "model": "setup and tests before the ledger", "usd": 8.22, "detail": "real rates from Higgsfield's estimate endpoint (Marketing Studio 3:4 = $0.277/image): test carousel 1.425, model test 0.476, materials 1.662, cloud test 1.425, prototypes 3.23"}
+{"at": "2026-10-28T10:59:44+00:00", "post": null, "service": "anthropic", "model": "claude-opus-5-5", "usd": 0.25, "detail": "estimated: research and copy for 2 carousels"}
+{"at": "2026-10-28T11:00:40+00:00", "post": "qa-test", "service": "anthropic", "model": "claude-opus-5-5", "usd": 0.0243}
+{"at": "2026-10-28T11:00:45+00:00", "post": "qa-test", "service": "anthropic", "model": "claude-opus-5-5", "usd": 0.0169}
+{"at": "2026-10-28T11:00:53+00:00", "post": "qa-test", "service": "anthropic", "model": "claude-opus-5-5", "usd": 0.0203}

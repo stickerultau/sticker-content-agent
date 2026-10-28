@@ -4,14 +4,14 @@ How the automation runs, where its secrets live, and how to change, update, fix 
 
 ## How a scheduled run works
 
-GitHub Actions starts `.github/workflows/autopost.yml` on schedule (carousel daily 17:00 UTC, reel Tue/Thu/Sat
-11:00 UTC; Romania is UTC+2 in winter and UTC+3 in summer). Each run:
+GitHub Actions starts `.github/workflows/autopost.yml` on schedule (carousel daily 17:00 UTC; reel Tue/Thu/Sat
+11:00 UTC, paused since 28 Oct 2026; Romania is UTC+2 in winter and UTC+3 in summer). Each run:
 
 1. installs FFmpeg and the Python packages;
 2. runs `python run.py post --format carousel|reel`:
    **topic research → copy → visuals (Higgsfield) → design & edit → publish** (media goes to the repo's `media`
    branch, then the Instagram API publishes it, labeled as AI content);
-3. commits `state/` (post history and, when renewed, the encrypted Instagram token);
+3. commits `state/` (post history, the cost log and, when renewed, the encrypted Instagram token);
 4. keeps the post's files as a downloadable artifact for 14 days.
 
 Watch it under **GitHub → Actions**: each run's summary shows a preview, the caption and the Instagram link.
@@ -74,7 +74,8 @@ Delete the `TOKEN_KEY` line from `.env`, put a fresh `IG_ACCESS_TOKEN` in `.env`
 | Make every post a collab with the shop | `page.collaborators: ["stickerul.tau"]` (the shop accepts each invite in the app) |
 
 **Pause**: GitHub → Actions → Content Creation Agent → **⋯ → Disable workflow** (re-enable the same way).
-Pausing longer than 60 days lets the Instagram token expire.
+Pausing longer than 60 days lets the Instagram token expire. To pause one format only, put `#` before its `cron`
+line in the workflow (reels are paused this way since 28 Oct 2026).
 
 ## Review before posting and posting by hand
 
@@ -105,9 +106,13 @@ Current choices (verified 28 Oct 2026 with a side-by-side test of the same stick
 
 | Role | Model (tried in order) | Price |
 |---|---|---|
-| Sticker images | `marketing-studio/image` (best looking), `ideogram/v4.0`, `xai/grok-imagine-image-2.0` | ≈ $0.011 / $0.03 / $0.04 |
-| Laptop mockup | `alibaba/qwen-image-3/edit` (accepts at most 3 reference images) | ≈ $0.04 |
-| Reel clips | `kling-video/v2.5-turbo/pro/image-to-video`, `kling-video/v2.6/pro/image-to-video`, `minimax/hailuo-2.3/standard/image-to-video` | ≈ $0.02–0.04 per second |
+| Sticker images | `marketing-studio/image` (best looking), `ideogram/v4.0`, `xai/grok-imagine-image-2.0` | $0.277 (3:4) / $0.06 / $0.06 |
+| Laptop mockup | `alibaba/qwen-image-3/edit` (accepts at most 3 reference images) | $0.04 |
+| Reel clips | `kling-video/v2.5-turbo/pro/image-to-video`, `kling-video/v2.6/pro/image-to-video`, `minimax/hailuo-2.3/standard/image-to-video` | $0.30 per 5 s / $0.60 per 5 s / $0.24 per 6 s |
+
+Prices are what Higgsfield's estimate endpoint (`POST https://api.higgsfield.ai/estimate/<model>`, free) returned
+on 28 Oct 2026. The agent asks it for every generation and logs the answer. Marketing Studio's price depends on the
+image shape: 3:4 (the carousel, 1744×2336 px) $0.277, 9:16 $0.21, 2:3 $0.197; `resolution: "1k"` costs about half.
 
 ## The `media` branch
 
@@ -118,8 +123,19 @@ GitHub may suggest "Compare & pull request" for it: ignore that. Deleting it is 
 
 ## Costs and balances
 
-Each run log ends with "Estimated cost of this post". Balances: Claude at <https://console.anthropic.com> (Billing),
-Higgsfield at <https://open.higgsfield.ai>. A run fails with a clear message when a balance is empty; set low-balance
+Every paid call is logged in `state/costs.jsonl`: Higgsfield generations with the real price from the estimate
+endpoint, Claude calls from their token counts. See the month, by model and by post:
+
+```powershell
+.\.venv\Scripts\python.exe run.py costs
+```
+
+Each run's log and GitHub summary show the post's cost and the month so far. `budget.monthly_usd` in
+`config/page.yaml` (default $60) stops new posts once the month's logged spend reaches it; raise it to continue.
+Typical costs: carousel ≈ $1.55 (5 images × $0.277, mockup $0.04, Claude ≈ $0.12).
+
+Balances: Claude at <https://console.anthropic.com> (Billing), Higgsfield API at <https://open.higgsfield.ai>
+(separate from Higgsfield app plans). A run fails with a clear message when a balance is empty; set low-balance
 alerts where offered.
 
 ## Troubleshooting

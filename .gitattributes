@@ -1,0 +1,2 @@
+# The cost log only gets new lines (from the cloud and from local runs): keep both sides when merging.
+state/costs.jsonl merge=union

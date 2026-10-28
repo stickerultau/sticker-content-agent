@@ -8,7 +8,7 @@ from zoneinfo import ZoneInfo
 
 from PIL import Image
 
-from . import copywriter, design, log, research, state, video, visuals, voice
+from . import copywriter, costs, design, log, research, state, video, visuals, voice
 from .higgsfield import Higgsfield
 from .hosting import GitHubMediaHost
 from .instagram import Instagram
@@ -49,6 +49,12 @@ def _save(img: Image.Image, path: Path) -> str:
 
 def create(cfg: dict, fmt: str) -> Path:
     now = now_local(cfg)
+    budget = (cfg.get("budget") or {}).get("monthly_usd")
+    spent = costs.total()
+    if budget and spent >= budget:
+        raise RuntimeError(f"Monthly budget reached: ${spent:.2f} of ${budget:.2f} spent this month "
+                           "(raise budget.monthly_usd in config/page.yaml to continue).")
+    costs.set_post(f"{now:%Y-%m-%d_%H%M}_{fmt}")
     claude = Claude(cfg["models"]["claude"], cfg["models"]["effort"])
 
     with log.step(1, "Topic research"):
@@ -76,7 +82,8 @@ def create(cfg: dict, fmt: str) -> Path:
 
     post["cost_usd"] = round(claude.cost + hf.spent, 3)
     write_json(post_dir / "post.json", post)
-    log.info(f"Estimated cost of this post: ${post['cost_usd']:.2f} (Claude ${claude.cost:.2f}, Higgsfield ${hf.spent:.2f})")
+    log.info(f"Cost of this post: ${post['cost_usd']:.2f} (Claude ${claude.cost:.2f}, Higgsfield ${hf.spent:.2f}); "
+             f"this month so far: ${costs.total():.2f}" + (f" of ${budget:.2f}" if budget else ""))
     log.info(f"Saved in {post_dir}")
     return post_dir
 
@@ -185,6 +192,9 @@ def publish(cfg: dict, post_dir: Path) -> dict:
                "permalink": result.get("permalink"), "media_id": result.get("media_id")})
     log.info(f"Published: {result.get('permalink')}")
     preview = url_list[0] if post["format"] == "carousel" else url_list[-1]
+    budget = (cfg.get("budget") or {}).get("monthly_usd")
     log.summary(f"### {post['theme']}\n\n[Open on Instagram]({result.get('permalink')})\n\n"
-                f"<img src=\"{preview}\" width=\"320\">\n\n```\n{post['caption']}\n```")
+                f"<img src=\"{preview}\" width=\"320\">\n\n"
+                f"Cost of this post: **${post.get('cost_usd') or 0:.2f}**; this month so far: **${costs.total():.2f}**"
+                + (f" of ${budget:.2f}" if budget else "") + f"\n\n```\n{post['caption']}\n```")
     return result

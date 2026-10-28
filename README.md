@@ -12,12 +12,13 @@ Claude + trends   Claude   Higgsfield  brand templates   Instagram API
 | What | When (Romania time) | Made of |
 |---|---|---|
 | Carousel: a themed pack of 5 sticker designs | every day, 19:00 | cover, 5 numbered stickers (each in one of the shop's materials: glossy, matte, holographic, transparent, electrostatic, epoxy 3D), a real-life mockup (laptop, car, shop window…), "pick your favorite" slide |
-| Reel: 3 stickers peeled and stuck on objects | Tue, Thu, Sat, 13:00 | AI video clips, Romanian voiceover, animated captions, end card |
+| Reel: **paused** until the new animated template (no voiceover) is approved | Tue, Thu, Sat, 13:00 | AI video clips, on-screen hook, end card |
 
 It runs on **GitHub Actions**, so no computer needs to be on. Each run picks a fresh theme from upcoming occasions,
-today's Google Trends in Romania and the post history, so themes don't repeat. Cost: about **$8–15/month**
-(Claude ≈ $0.10 per post, Higgsfield ≈ $0.05–0.20 per carousel and ≈ $0.40–0.60 per reel; Instagram's API,
-GitHub Actions and the voiceover are free).
+today's Google Trends in Romania and the post history, so themes don't repeat. Cost at Higgsfield's real rates:
+about **$1.55 per carousel** (≈ $47/month for the daily carousel) and $1.65–2.05 per reel. Every paid call is
+logged with its real price in `state/costs.jsonl` (`run.py costs` shows the month), and `budget.monthly_usd` in
+`config/page.yaml` ($60) stops new posts once a month's spend reaches it. Instagram's API and GitHub Actions are free.
 
 ## Documentation
 
@@ -34,6 +35,7 @@ GitHub Actions and the voiceover are free).
 | `.\.venv\Scripts\python.exe run.py create --format carousel` | makes a post in `output/` without publishing (`--format reel` for a reel) |
 | `.\.venv\Scripts\python.exe run.py publish output\<folder>` | publishes a post made earlier (then push `state/`, see OPERATIONS) |
 | `.\.venv\Scripts\python.exe run.py render output\<folder>` | re-renders slides or the reel after you edit its `copy.json` |
+| `.\.venv\Scripts\python.exe run.py costs` | spend this month (by model and by post) against the monthly budget |
 | `.\.venv\Scripts\python.exe tests\smoke_test.py` | offline end-to-end test: no keys, no internet, no cost |
 | `powershell -ExecutionPolicy Bypass -File scripts\setup-local.ps1` | prepares a computer (Python environment, packages, `.env`) |
 | `powershell -ExecutionPolicy Bypass -File scripts\deploy.ps1` | first deployment to GitHub (safe to re-run) |

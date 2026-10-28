@@ -5,6 +5,8 @@ import json
 
 import anthropic
 
+from . import costs
+
 # Claude Opus 5.5 list prices, USD per million tokens (used only for the cost estimate in the logs).
 PRICE_IN, PRICE_OUT = 4.0, 20.0
 
@@ -41,7 +43,9 @@ class Claude:
             output_config={"effort": self.effort, "format": {"type": "json_schema", "schema": schema}},
         )
         usage = response.usage
-        self.cost += usage.input_tokens * PRICE_IN / 1e6 + usage.output_tokens * PRICE_OUT / 1e6
+        call_cost = usage.input_tokens * PRICE_IN / 1e6 + usage.output_tokens * PRICE_OUT / 1e6
+        self.cost += call_cost
+        costs.record("anthropic", self.model, call_cost)
         if response.stop_reason == "refusal":
             details = getattr(response, "stop_details", None)
             raise RuntimeError(f"Claude declined this request (category: {getattr(details, 'category', None)}).")

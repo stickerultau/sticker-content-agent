@@ -25,7 +25,7 @@ sys.path.insert(0, str(ROOT))
 TMP = Path(tempfile.mkdtemp(prefix="agent-smoke-"))
 os.environ.update(HF_API_KEY_ID="test-id", HF_API_KEY_SECRET="test-secret")
 
-from agent import copywriter, higgsfield, pipeline, research, state, tokens, voice  # noqa: E402
+from agent import copywriter, costs, higgsfield, pipeline, research, state, tokens, voice  # noqa: E402
 from agent.settings import load_config  # noqa: E402
 
 cfg = load_config()
@@ -134,6 +134,7 @@ class FakeMediaHost:
         return {name: f"https://cdn.jsdelivr.net/gh/owner/repo@sha/{name}" for name in files}
 
 
+costs.LEDGER = TMP / "costs.jsonl"   # never write to the real cost log
 pipeline.Claude, pipeline.Higgsfield = FakeClaude, FakeHiggsfield
 pipeline.Instagram, pipeline.GitHubMediaHost = FakeInstagram, FakeMediaHost
 pipeline.OUTPUT = TMP / "output"
@@ -165,6 +166,7 @@ def main() -> int:
         hf.submit = fake_submit
         hf.wait = lambda job, timeout, interval: {"status": "completed", "images": [{"url": "https://x/i.png"}]}
         hf.download = lambda url, path: path
+        hf.estimate = lambda model, arguments: 0.05  # no network
         result = hf.generate([{"id": "missing/model"}, {"id": "good/model", "max_refs": 2}], "p", TMP / "a.jpg",
                              extra={"aspect_ratio": "3:4"}, refs=["r1", "r2", "r3"])
         assert result["model"] == "good/model" and "aspect_ratio" not in calls[-1]
@@ -181,6 +183,18 @@ def main() -> int:
         os.environ["IG_ACCESS_TOKEN"] = "IGAA-test-2"
         assert tokens.load()["access_token"] == "IGAA-test-2"
         print("ok  encrypted token storage")
+
+        costs.LEDGER.unlink(missing_ok=True)
+        costs.set_post("p1")
+        costs.record("higgsfield", "model-a", 0.5)
+        costs.record("anthropic", "claude", 0.1)
+        assert costs.total(post="p1") == 0.6 and costs.total() == 0.6 and "of $60.00 budget" in costs.report(60)
+        try:
+            pipeline.create({**cfg, "budget": {"monthly_usd": 0.5}}, "carousel")
+            raise AssertionError("the budget cap did not stop the post")
+        except RuntimeError as exc:
+            assert "budget" in str(exc)
+        print("ok  cost ledger and monthly budget cap")
 
         # Full runs
         shop = "@" + cfg["page"]["shop_handle"]

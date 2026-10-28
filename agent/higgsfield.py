@@ -10,7 +10,7 @@ from pathlib import Path
 
 import requests
 
-from . import log
+from . import costs, log
 from .settings import env
 
 API = "https://api.higgsfield.ai"
@@ -80,6 +80,14 @@ class Higgsfield:
             time.sleep(interval)
         raise HiggsfieldError(f"generation timed out after {timeout:.0f}s (request {job.get('request_id')})")
 
+    def estimate(self, model: str, arguments: dict) -> float | None:
+        """Real price in USD for this exact request on your account (Higgsfield's estimate endpoint)."""
+        try:
+            r = requests.post(f"{API}/estimate/{model}", json=arguments, headers=self.headers, timeout=30)
+            return float(r.json()["usd"]) if r.ok else None
+        except (requests.RequestException, KeyError, ValueError, TypeError):
+            return None
+
     @staticmethod
     def download(url: str, path: Path) -> Path:
         path.parent.mkdir(parents=True, exist_ok=True)
@@ -118,9 +126,13 @@ class Higgsfield:
                     data = self.wait(self.submit(model, arguments), timeout, interval)
                     url = data["video"]["url"] if kind == "video" else data["images"][0]["url"]
                     self.download(url, out)
-                    seconds = float(arguments.get("duration", 0) or 0)
-                    self.spent += spec.get("price", 0) + spec.get("price_per_sec", 0) * seconds
-                    return {"path": str(out), "url": url, "model": model}
+                    usd = self.estimate(model, arguments)
+                    if usd is None:  # fall back to the price noted in config/page.yaml
+                        seconds = float(arguments.get("duration", 0) or 0)
+                        usd = spec.get("price", 0) + spec.get("price_per_sec", 0) * seconds
+                    self.spent += usd
+                    costs.record("higgsfield", model, usd, out.name)
+                    return {"path": str(out), "url": url, "model": model, "usd": round(usd, 4)}
                 except ModelRejected as exc:
                     if attempt == 0 and extra and any(k in arguments for k in extra):
                         log.warn(f"{model} rejected optional settings; retrying without them")

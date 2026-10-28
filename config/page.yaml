@@ -95,15 +95,21 @@ formats:
 models:
   claude: "claude-opus-5-5"
   effort: "high"
-  # Higgsfield API models, tried in order until one succeeds. Prices are USD (Higgsfield API, Oct 2026).
-  # IDs verified against GET https://api.higgsfield.ai/models; picked from a side-by-side sticker test.
+  # Higgsfield API models, tried in order until one succeeds. IDs verified against GET https://api.higgsfield.ai/models.
+  # Real prices are read from Higgsfield's estimate endpoint at run time and written to state/costs.jsonl;
+  # the price values below are only a fallback (account rates, 28 Oct 2026). Marketing Studio's price depends on the
+  # shape: $0.277 at 3:4 (carousel, 1744x2336 px), $0.21 at 9:16; `resolution: "1k"` costs about half.
   sticker_image:
-    - {id: "marketing-studio/image", args: {}, price: 0.0107}
-    - {id: "ideogram/v4.0", args: {}, price: 0.03}
-    - {id: "xai/grok-imagine-image-2.0", args: {}, price: 0.04}
+    - {id: "marketing-studio/image", args: {}, price: 0.277}
+    - {id: "ideogram/v4.0", args: {}, price: 0.06}
+    - {id: "xai/grok-imagine-image-2.0", args: {}, price: 0.06}
   mockup_image:                    # receives the sticker images as references
     - {id: "alibaba/qwen-image-3/edit", args: {}, refs: "image_urls", max_refs: 3, price: 0.04}
   video:
-    - {id: "kling-video/v2.5-turbo/pro/image-to-video", args: {duration: 5, cfg_scale: 0.5}, price_per_sec: 0.021}
-    - {id: "kling-video/v2.6/pro/image-to-video", args: {duration: 5}, price_per_sec: 0.035}
-    - {id: "minimax/hailuo-2.3/standard/image-to-video", args: {duration: 6}, price_per_sec: 0.0117}
+    - {id: "kling-video/v2.5-turbo/pro/image-to-video", args: {duration: 5, cfg_scale: 0.5}, price_per_sec: 0.06}
+    - {id: "kling-video/v2.6/pro/image-to-video", args: {duration: 5}, price_per_sec: 0.07}
+    - {id: "minimax/hailuo-2.3/standard/image-to-video", args: {duration: 6}, price_per_sec: 0.05}
+
+budget:
+  monthly_usd: 60                  # the agent stops creating posts once this month's recorded spend reaches it
+                                   # (see it with: python run.py costs)
