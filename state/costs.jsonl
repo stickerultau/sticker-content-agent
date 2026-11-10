@@ -203,3 +203,5 @@
 {"at": "2026-11-08T17:06:36+00:00", "post": "2026-11-08_1905_carousel", "service": "anthropic", "model": "claude-opus-5-5", "usd": 0.0895}
 {"at": "2026-11-09T17:07:23+00:00", "post": "2026-11-09_1906_carousel", "service": "anthropic", "model": "claude-opus-5-5", "usd": 0.0516}
 {"at": "2026-11-09T17:08:02+00:00", "post": "2026-11-09_1906_carousel", "service": "anthropic", "model": "claude-opus-5-5", "usd": 0.0818}
+{"at": "2026-11-10T17:06:45+00:00", "post": "2026-11-10_1906_carousel", "service": "anthropic", "model": "claude-opus-5-5", "usd": 0.0573}
+{"at": "2026-11-10T17:07:21+00:00", "post": "2026-11-10_1906_carousel", "service": "anthropic", "model": "claude-opus-5-5", "usd": 0.0807}
