@@ -120,9 +120,29 @@ class Instagram:
         raise InstagramError("Instagram took too long to process the media")
 
     def _publish(self, container: str) -> dict:
-        media_id = self._request("POST", f"{self.ig_id}/media_publish", creation_id=container)["id"]
+        try:
+            media_id = self._request("POST", f"{self.ig_id}/media_publish", creation_id=container)["id"]
+        except InstagramError as exc:
+            # Instagram sometimes answers with an error although the post went out (seen on 25 Nov 2026,
+            # code -1/2207085). Look before failing, so a live post is recorded and never published twice.
+            media_id = self._published_anyway(container)
+            if media_id is None:
+                raise
+            log.warn(f"Instagram reported an error ({exc}), but the post is live")
         info = self._request("GET", media_id, fields="permalink,timestamp")
         return {"media_id": media_id, "permalink": info.get("permalink")}
+
+    def _published_anyway(self, container: str, checks: int = 6, interval: float = 20) -> str | None:
+        """The new post's media id if the container got published despite an error, else None."""
+        for _ in range(checks):
+            time.sleep(interval)
+            status = self._request("GET", container, fields="status_code").get("status_code")
+            if status == "PUBLISHED":
+                latest = self._request("GET", f"{self.ig_id}/media", fields="id", limit=1).get("data", [])
+                return latest[0]["id"] if latest else None
+            if status in ("ERROR", "EXPIRED"):
+                return None
+        return None
 
     def publish_carousel(self, image_urls: list[str], caption: str, alt_texts: list[str] | None = None,
                          collaborators: list[str] | None = None) -> dict:

@@ -25,7 +25,7 @@ sys.path.insert(0, str(ROOT))
 TMP = Path(tempfile.mkdtemp(prefix="agent-smoke-"))
 os.environ.update(HF_API_KEY_ID="test-id", HF_API_KEY_SECRET="test-secret")
 
-from agent import copywriter, costs, higgsfield, pipeline, research, state, tokens, video  # noqa: E402
+from agent import copywriter, costs, higgsfield, instagram, pipeline, research, state, tokens, video  # noqa: E402
 from agent.settings import load_config  # noqa: E402
 
 cfg = load_config()
@@ -206,6 +206,30 @@ def main() -> int:
         os.environ["IG_ACCESS_TOKEN"] = "IGAA-test-2"
         assert tokens.load()["access_token"] == "IGAA-test-2"
         print("ok  encrypted token storage")
+
+        # Instagram answers media_publish with an error, but the post is live: record it, don't fail or repost.
+        ig = instagram.Instagram.__new__(instagram.Instagram)
+        ig._account = {"user_id": "1"}
+        sent = []
+
+        def fake_request(method, path, **params):
+            sent.append((method, path))
+            if path.endswith("media_publish"):
+                raise instagram.InstagramError("An internal server error occurred. (code -1/2207085)")
+            if path == "container-1":
+                return {"status_code": "PUBLISHED"}
+            if path == "1/media":
+                return {"data": [{"id": "99"}]}
+            return {"permalink": "https://www.instagram.com/p/LIVE/"}
+
+        ig._request, sleep = fake_request, instagram.time.sleep
+        instagram.time.sleep = lambda s: None
+        try:
+            assert ig._publish("container-1") == {"media_id": "99", "permalink": "https://www.instagram.com/p/LIVE/"}
+        finally:
+            instagram.time.sleep = sleep
+        assert sum(1 for m, p_ in sent if p_.endswith("media_publish")) == 1, "never publish twice"
+        print("ok  Instagram error but the post is live: recorded once, not reposted")
 
         costs.LEDGER.unlink(missing_ok=True)
         costs.set_post("p1")
