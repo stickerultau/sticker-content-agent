@@ -3,7 +3,8 @@ name: Content Creation Agent
 on:
   schedule:
     - cron: "0 17 * * *"       # carousel every day at 19:00 Romania time (20:00 in summer)
-    - cron: "0 18 * * 5"       # reel every Friday at 20:00 Romania time (21:00 in summer); "#" in front pauses it
+    # Reels are off (25 Nov 2026): carousels only. To bring the Friday 20:00 reel back, remove the "#":
+    # - cron: "0 18 * * 5"     # reel every Friday at 20:00 Romania time (21:00 in summer)
   workflow_dispatch:
     inputs:
       format:
